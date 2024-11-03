@@ -19,6 +19,7 @@ const MapComponent = () => {
     default: true,
   });
 
+  const swedenMaxBounds =  [[10.722656,55.078367],[24.960938,69.146920]];
   const [showRailway, setShowRailway] = useState(true);
   const [showIndustry, setShowIndustry] = useState(true);
   const [showSchools, setShowSchools] = useState(true);
@@ -35,12 +36,16 @@ const MapComponent = () => {
       container: mapContainerRef.current,
       style: 'mapbox://styles/mapbox/streets-v12',
       center: [16.5, 59.37],
-      zoom: 12,
-      maxZoom: 20,
+      //zoom: 1,
+     
+      bounds: swedenMaxBounds,
+      maxBounds:swedenMaxBounds
     });
     mapRef.current = map;
 
     map.on('load', () => {
+      //map.fitBounds(swedenMaxBounds);
+      
       fetch('/export.geojson')
         .then((response) => response.json())
         .then((data) => {
