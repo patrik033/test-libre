@@ -1,0 +1,110 @@
+{
+    "counties": [
+      {
+        "id": "stockholm",
+        "name": "Stockholm County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51264d6775a2a93240596438d6c32bb24d40f00101f90177d400000000000092030f53746f636b686f6c6d73206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "uppsala",
+        "name": "Uppsala County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51b214472cd79f314059e01b727399124e40f00101f901ccd300000000000092030c55707073616c61206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "sodermanland",
+        "name": "Södermanland County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51caabbe09baba304059ac28ce8b827b4d40f00101f90172d400000000000092031353c3b66465726d616e6c616e6473206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "ostergotland",
+        "name": "Östergötland County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51df4e3092df0b3040598e09f0da142f4d40f00101f901835a0e0000000000920314c3967374657267c3b6746c616e6473206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "jonkoping",
+        "name": "Jönköping County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=511df373f448482d405959dcd4d688c44c40f00101f90166d40000000000009203114ac3b66e6bc3b670696e6773206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "kronoberg",
+        "name": "Kronoberg County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51f3c3a6b183d22c40591d074c9e7c664c40f00101f9018cd400000000000092030f4b726f6e6f6265726773206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "kalmar",
+        "name": "Kalmar County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51500926cc3c9330405970ee8f5690834c40f00101f90191d400000000000092030b4b616c6d6172206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "gotland",
+        "name": "Gotland County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51328cf5b565983240596486d4b7f1d24c40f00101f901da5d0e000000000092030d476f746c616e6473206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "blekinge",
+        "name": "Blekinge County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=5108ec166427ce2e40598a21ae940a104c40f00101f9018dd400000000000092030d426c656b696e6765206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "skane",
+        "name": "Skåne County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51de1323dc75442b40590edeaf5989ec4b40f00101f90189d400000000000092030b536bc3a56e65206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "halland",
+        "name": "Hallands County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51fadf42b288b62940598b0a92ca397a4c40f00101f90183d400000000000092030d48616c6c616e6473206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "vastra-gotaland",
+        "name": "Västra Götaland County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=519b25e015eb4d294059919ad2bdbd1c4d40f00101f9015fd400000000000092031756c3a4737472612047c3b674616c616e6473206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "varmland",
+        "name": "Värmland County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51ddec9b01eb962a40590e0c078104f24d40f00101f901cfd300000000000092030f56c3a4726d6c616e6473206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "orebro",
+        "name": "Örebro County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=5127029900cff92d40595d512f6258b04d40f00101f901ced300000000000092030cc396726562726f206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "vastmanland",
+        "name": "Västmanland County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=5156272f78422f3040592c52e24529d94d40f00101f901cdd300000000000092031256c3a473746d616e6c616e6473206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "dalarna",
+        "name": "Dalarna County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=516645964f276e2c4059a4542176ba874e40f00101f90162ce00000000000092030d44616c61726e6173206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "gavleborg",
+        "name": "Gävleborg County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51dc16819a12b2304059f05be70f2ba14e40f00101f90160ce00000000000092031047c3a4766c65626f726773206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "vasternorrland",
+        "name": "Västernorrland County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51f4244c7bf4193240597a2ac5e6ad844f40f00101f9015bce00000000000092031556c3a4737465726e6f72726c616e6473206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "jamtland",
+        "name": "Jämtland County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=51de8a11d0fd3f2c4059c6f4b63d30ac4f40f00101f9015ace00000000000092030f4ac3a46d746c616e6473206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "vasterbotten",
+        "name": "Västerbotten County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=5146ee0ccda08d3240598ec69d449f2e5040f00101f90159ce00000000000092031356c3a473746572626f7474656e73206cc3a46e&geometry=geometry_1000&apiKey="
+      },
+      {
+        "id": "norrbotten",
+        "name": "Norrbotten County",
+        "fetchLink": "https://api.geoapify.com/v1/boundaries/consists-of?id=5120b94d4dd0ff3340592af274a3c5be5040f00101f90158ce0000000000009203104e6f7272626f7474656e73206cc3a46e&geometry=geometry_1000&apiKey="
+      }
+    ]
+  }
+  
