@@ -1,28 +1,19 @@
 "use client"
 
-import Image from "next/image";
+
 import { useState, useEffect } from 'react';
 import MapComponent from "@/components/MapComponent";
 import AnimatedMap from "@/components/AnimatedMap";
-import MapBoundaries from "@/components/MapBoundaries";
+import MapBoundaries from "@/app/Map/MapBoundaries";
 import HomePage from "@/components/HomePage";
 export default function Home() {
 
-  const [jsonData, setJsonData] = useState(null);
+ 
 
-  useEffect(() => {
-    // Hämta JSON-data från public-mappen
-    fetch('/export.geojson')
-      .then((response) => response.json())
-      .then((data) => setJsonData(data))
-      .catch((error) => console.error('Error loading JSON data:', error));
-  }, []);
-
-  if (!jsonData) return <p>Laddar data...</p>;
   return (
       <div >
-        {/* <HomePage/> */}
-        <MapBoundaries />
+        <HomePage/>
+        {/* <MapBoundaries /> */}
         {/* <AnimatedMap/> */}
         {/* <MapComponent/> */}
       </div>

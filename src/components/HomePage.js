@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import Link from 'next/link'
 
 const HomePage = () => {
 
@@ -25,7 +26,7 @@ const HomePage = () => {
         <div className={`flex-col sm:flex-row flex-grow items-center sm:justify-between sm:flex ${navOpen ? 'flex' : 'hidden'} sm:flex`}>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 mt-4 sm:mt-0 text-center sm:text-left">
             <a href="#" className="text-white hover:text-gray-300">Hem</a>
-            <a href="#services" className="text-white hover:text-gray-300">Tjänster</a>
+            <Link href={`/Map`} className="text-white hover:text-gray-300">Tjänster</Link>
             <a href="#why-choose-us" className="text-white hover:text-gray-300">Varför oss</a>
             <a href="#contact" className="text-white hover:text-gray-300">Kontakt</a>
           </div>

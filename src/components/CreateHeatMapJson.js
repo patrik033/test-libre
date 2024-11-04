@@ -30,6 +30,19 @@ const createNoisePollutionGeoJSON = (data) => {
         });
     };
 
+    const addPolygonFeature = (nodes, noiseLevel, sourceType) => {
+        const coordinates = nodes
+            .map((nodeId) => nodesIndex[nodeId])
+            .filter(Boolean)
+            .map((node) => [node.lon, node.lat]);
+
+        features.push({
+            type: 'Feature',
+            geometry: { type: 'Polygon', coordinates: [coordinates] },
+            properties: { noiseLevel, sourceType },
+        });
+    };
+
     data.elements.forEach((element) => {
         let noiseLevel = 0;
         let sourceType = null;
@@ -37,10 +50,12 @@ const createNoisePollutionGeoJSON = (data) => {
         // Hantera vägar
         if (element.type === 'way' && element.tags && element.tags.highway) {
             sourceType = 'road';
+
+            // Om det är en primary-väg, behandla den likadant oavsett "ref"-tagg
             switch (element.tags.highway) {
                 case 'motorway': noiseLevel = 10; break;
                 case 'trunk': noiseLevel = 8; break;
-                case 'primary': noiseLevel = 6; break;
+                case 'primary': noiseLevel = 6; break;  // Alla primary behandlas likadant
                 case 'secondary': noiseLevel = 4; break;
                 case 'tertiary': noiseLevel = 2; break;
                 default: noiseLevel = 1;
@@ -55,24 +70,25 @@ const createNoisePollutionGeoJSON = (data) => {
             addLineFeature(element.nodes, noiseLevel, sourceType);
         }
 
-        // Hantera skolor och industriområden som polygoner
-        const handlePolygon = (sourceTypeVal, noiseLevelVal, distVal) => {
+        // Hantera industriområden som polygoner med unik ljudnivå
+        if (element.tags && element.tags.landuse === 'industrial') {
+            sourceType = 'industry';
+            noiseLevel = 12;  // Unik ljudnivå för industriområden
             if (element.type === 'way') {
-                features.push({
-                    type: 'Feature',
-                    geometry: {
-                        type: 'Polygon',
-                        coordinates: [[...element.nodes.map((nodeId) => [nodesIndex[nodeId].lon, nodesIndex[nodeId].lat])]],
-                    },
-                    properties: { noiseLevel: noiseLevelVal, sourceType: sourceTypeVal },
-                });
-            } else if (element.type === 'node') {
-                addFeature(element.lon, element.lat, noiseLevelVal, sourceTypeVal, distVal);
+                addPolygonFeature(element.nodes, noiseLevel, sourceType);
             }
-        };
+        }
 
-        if (element.tags && element.tags.amenity === 'school') handlePolygon('school', 5, [30, 60, 90]);
-        if (element.tags && element.tags.landuse === 'industrial') handlePolygon('industry', 6, [70, 140, 210]);
+        // Hantera skolor som polygoner
+        if (element.tags && element.tags.amenity === 'school') {
+            sourceType = 'school';
+            noiseLevel = 5;
+            if (element.type === 'way') {
+                addPolygonFeature(element.nodes, noiseLevel, sourceType);
+            } else if (element.type === 'node') {
+                addFeature(element.lon, element.lat, noiseLevel, sourceType, [30, 60, 90]);
+            }
+        }
     });
 
     return { type: 'FeatureCollection', features };
