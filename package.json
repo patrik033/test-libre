@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@deck.gl/mapbox": "^9.0.34",
+    "@geoapify/geocoder-autocomplete": "^2.1.0",
+    "@geoapify/react-geocoder-autocomplete": "^2.0.1",
     "deck.gl": "^9.0.34",
     "idb": "^8.0.0",
     "mapbox-gl": "^3.7.0",

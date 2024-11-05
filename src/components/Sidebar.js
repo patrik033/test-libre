@@ -16,15 +16,14 @@ const Sidebar = ({
   setShowIndustry,
   showSchools,
   setShowSchools,
-  goBackToCountryView
+  goBackToCountryView,
 }) => {
-
   return (
-    <aside className="bg-gray-800 text-white w-64 p-6 space-y-4 flex-shrink-0">
-      <h2 className="text-xl font-semibold mb-4">Välj Data Typ</h2>
-      
+    <aside className="bg-gray-800 text-white p-4 space-y-4">
+      <h2 className="text-xl font-semibold">Välj Data Typ</h2>
+
       {/* Checkboxar för datatyper */}
-      <div className="flex flex-col space-y-2">
+      <div className="space-y-2 space-x-2">
         <label>
           <input
             type="checkbox"
@@ -59,7 +58,7 @@ const Sidebar = ({
       {showFilterOptions && isNoiseFilterChecked && (
         <div className="mt-4">
           <h3 className="text-lg font-semibold">Bullerfilter</h3>
-          <div className="flex flex-col space-y-2">
+          <div className="space-y-2">
             {Object.keys(roadFilter).map((type) => (
               <label key={type} className="flex items-center">
                 <input
@@ -83,14 +82,6 @@ const Sidebar = ({
               <span className="ml-2">Skolor</span>
             </label>
           </div>
-        </div>
-      )}
-
-      {/* Fastighetsdata-filter (om vi har något att visa) */}
-      {showFilterOptions && isPropertyDataChecked && (
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold">Fastighetsdata Filter</h3>
-          <p className="text-sm">Inga specifika filter tillgängliga just nu.</p>
         </div>
       )}
 
