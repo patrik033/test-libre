@@ -5,19 +5,19 @@ import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-g
 import '@geoapify/geocoder-autocomplete/styles/minimal.css'
 
 
-import Sidebar from '../../components/Sidebar';
-import { getFeatureBounds } from '../../components/MapUtils';
-import { loadCountyBoundaries, addCountyEventListeners } from '../../components/Boundaries';
-import { addCountyPopupEvents } from '@/components/CountyPopupEvents';
-import { loadMunicipalities } from '@/components/Municipalities';
-import { loadNoisePollutionData } from '@/components/NoisePollution';
-import { updateFilters } from '@/components/MapFilters';
+import Sidebar from '../../components/UI/Sidebar';
+import { getFeatureBounds } from './MapUtils';
+import { loadCountyBoundaries, addCountyEventListeners } from '../../components/Layers/LoadCountryBoundariesLayer';
+import { addCountyPopupEvents } from '@/components/Layers/AddCountyBoundaryHoverPopup';
+import { loadMunicipalities } from '@/components/Layers/LoadMunicipalitiesLayer';
+import { loadNoisePollutionData } from '@/components/Layers/LoadNoisePollutionLayer';
+import { updateFilters } from '@/components/Layers/CreateNoisePollutionLayerControls';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 const SWEDEN_BOUNDS = [[10.371094, 55.603178], [24.038086, 69.162558]];
 const apiKey = process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY;
 
-const MapBoundaries = () => {
+const MarketTrendsMap = () => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const countyBoundariesData = useRef(null);
@@ -122,10 +122,12 @@ const MapBoundaries = () => {
 
 
   useEffect(() => {
-    // Om checkboxen för bullerdata är markerad och Eskilstuna kommun är vald, ladda bullerdatan
+    const map = mapRef.current;
+  
     if (isNoiseFilterChecked && markedMunicipalityName === "Eskilstuna kommun") {
+      // Ladda bullerdatan om filtret är aktiverat och Eskilstuna kommun är vald
       loadNoisePollutionData(
-        mapRef.current,
+        map,
         currentMunicipalityId,
         markedMunicipalityName,
         roadFilter,
@@ -134,8 +136,18 @@ const MapBoundaries = () => {
         showSchools,
         noiseDataCache
       );
+    } else {
+      // Om bullerfiltret är avaktiverat, ta bort bullerdatalagren och källan
+      if (map.getSource('noise-data')) {
+        if (map.getLayer('road-layer')) map.removeLayer('road-layer');
+        if (map.getLayer('railway-layer')) map.removeLayer('railway-layer');
+        if (map.getLayer('industry-layer')) map.removeLayer('industry-layer');
+        if (map.getLayer('school-layer')) map.removeLayer('school-layer');
+        map.removeSource('noise-data');
+      }
     }
   }, [isNoiseFilterChecked, currentMunicipalityId, markedMunicipalityName, roadFilter, showRailway, showIndustry, showSchools]);
+  
 
 
 
@@ -208,29 +220,59 @@ const MapBoundaries = () => {
     if (map) {
       setIsCountryView(true);
       setIsCountyView(false);
-
-
-
+      setIsMunicipalityView(false);
+  
+      // Zooma tillbaka till Sverigekartan
       map.fitBounds(SWEDEN_BOUNDS, {
         padding: 20,
         center: [17.5671981, 62.1983366]
       });
-
-
-      map.setLayoutProperty('county-boundaries', 'visibility', 'visible');
-      map.setLayoutProperty('county-boundaries-outline', 'visibility', 'visible');
-
+  
+      // Kontrollera och skapa om 'county-boundaries' och 'county-boundaries-outline' om de saknas
+      if (!map.getSource('county-boundaries')) {
+        // Ladda in din 'county-boundaries' data här
+        map.addSource('county-boundaries', {
+          type: 'geojson',
+          data: countyBoundariesData.current, // Förutsätter att du har lagrat datan i countyBoundariesData
+        });
+  
+        map.addLayer({
+          id: 'county-boundaries',
+          type: 'fill',
+          source: 'county-boundaries',
+          paint: {
+            'fill-color': '#FFD700',
+            'fill-opacity': 0.4,
+          }
+        });
+  
+        map.addLayer({
+          id: 'county-boundaries-outline',
+          type: 'line',
+          source: 'county-boundaries',
+          paint: {
+            'line-color': '#333333',
+            'line-width': 1,
+          }
+        });
+      } else {
+        // Om lagren redan finns, se till att de är synliga
+        map.setLayoutProperty('county-boundaries', 'visibility', 'visible');
+        map.setLayoutProperty('county-boundaries-outline', 'visibility', 'visible');
+      }
+  
+      // Ta bort valda kommun- eller buller-lager om de finns
       if (map.getSource('selected-municipality')) {
         map.removeLayer('selected-municipality-boundary');
         map.removeSource('selected-municipality');
       }
-
+  
       if (map.getSource('municipalities')) {
         map.removeLayer('municipality-boundaries');
         map.removeLayer('municipality-boundaries-outline');
         map.removeSource('municipalities');
       }
-
+  
       if (map.getSource('noise-data')) {
         map.removeLayer('road-layer');
         map.removeLayer('railway-layer');
@@ -240,7 +282,7 @@ const MapBoundaries = () => {
       }
     }
   };
-
+  
 
 
   function onPlaceSelect(value) {
@@ -251,6 +293,40 @@ const MapBoundaries = () => {
 
       // Centrera kartan på de valda koordinaterna
       if (mapRef.current) {
+
+        const map = mapRef.current;
+
+
+        if(map.getSource('county-boundaries')){
+          console.log("FOUND IT!!!")
+          //map.removeLayer('county-boundaries');
+          //map.removeLayer('county-boundaries-outline');
+         // map.removeSource('county-boundaries');
+
+        }
+
+
+        if (map.getSource('selected-municipality')) {
+          map.removeLayer('selected-municipality-boundary');
+          map.removeSource('selected-municipality');
+        }
+  
+        if (map.getSource('municipalities')) {
+          map.removeLayer('municipality-boundaries');
+          map.removeLayer('municipality-boundaries-outline');
+          map.removeSource('municipalities');
+        }
+  
+        if (map.getSource('noise-data')) {
+          map.removeLayer('road-layer');
+          map.removeLayer('railway-layer');
+          map.removeLayer('industry-layer');
+          map.removeLayer('school-layer');
+          map.removeSource('noise-data');
+        }
+
+
+
         mapRef.current.flyTo({
           center: [lon, lat],
           zoom: 12,
@@ -272,24 +348,24 @@ const MapBoundaries = () => {
   }
 
   function onSuggectionChange(value) {
-    console.log({onSuggestion: value});
+    //console.log({onSuggestion: value});
   }
 
   function onUserInput(input) {
-    console.log({onUserInput: input});
+    //console.log({onUserInput: input});
   }
   function onOpen(opened) {
-    console.log({onOpen:opened});
+    //console.log({onOpen:opened});
   }
 
   function onClose(closed) {
-    console.log({onOpen: closed})
+    //console.log({onOpen: closed})
   }
 
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
-      <div className="absolute top-4 left-4 z-10 bg-white p-2 rounded shadow-md w-80">
+      {/* <div className="absolute top-4 left-4 z-10 bg-white p-2 rounded shadow-md w-80">
         <GeoapifyContext apiKey="217e62842c104e729482561d013f7494">
           <div className="absolute top-4 left-4 z-10 w-80">
              <GeoapifyGeocoderAutocomplete
@@ -304,7 +380,7 @@ const MapBoundaries = () => {
           </div>
         </GeoapifyContext>
 
-      </div>
+      </div> */}
 
 
       <Sidebar
@@ -347,4 +423,4 @@ const MapBoundaries = () => {
 
 };
 
-export default MapBoundaries;
+export default MarketTrendsMap;

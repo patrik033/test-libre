@@ -1,6 +1,6 @@
 "use client";
-import MapBoundaries from "./MapBoundaries";
+import MarketTrendsMap from "./MarketTrendsMap";
 
 export default function Page(){
-    return <MapBoundaries/>
+    return <MarketTrendsMap/>
 }

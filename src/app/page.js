@@ -2,10 +2,8 @@
 
 
 import { useState, useEffect } from 'react';
-import MapComponent from "@/components/MapComponent";
 
-import MapBoundaries from "@/app/Map/MapBoundaries";
-import HomePage from "@/components/HomePage";
+import HomePage from "@/components/UI/HomePage";
 export default function Home() {
 
  

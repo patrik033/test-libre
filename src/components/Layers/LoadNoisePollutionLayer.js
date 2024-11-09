@@ -1,5 +1,5 @@
-import createNoisePollutionGeoJSON from "./CreateHeatMapJson";
-import { updateFilters } from './MapFilters';
+import createNoisePollutionGeoJSON from "./CreateNoisePollutionLayer";
+import { updateFilters } from './CreateNoisePollutionLayerControls';
 
 export const loadNoisePollutionData = async (map, municipalityId, municipalityName, roadFilter, showRailway, showIndustry, showSchools,noiseDataCache) => {
     try {
