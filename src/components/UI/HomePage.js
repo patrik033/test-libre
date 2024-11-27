@@ -3,74 +3,75 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { Link as ScrollLink } from "react-scroll";
 import { motion } from "framer-motion";
 import Fireworks from "@fireworks-js/react";
+import Footer from "./Footer/Footer";
 
-const Navbar = ({ navOpen, toggleNav }) => (
-  <nav className="bg-black bg-opacity-60 fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between">
-    <div className="text-white font-bold text-xl">Fastighetsplattform AB</div>
-    <button className="text-white text-2xl sm:hidden" onClick={toggleNav}>
-      {navOpen ? <FaTimes /> : <FaBars />}
-    </button>
-    <div
-      className={`absolute top-full left-0 w-full sm:w-auto sm:relative sm:flex sm:space-x-6 ${navOpen ? "block" : "hidden"
-        } bg-black sm:bg-transparent`}
-    >
-      {/* Global links */}
-      <a href="/Map" className="block text-white hover:text-gray-300 py-2 px-4">
-        Karta
-      </a>
-      <a
-        href="/Login"
-        className="block text-white hover:text-gray-300 py-2 px-4"
-      >
-        Logga in
-      </a>
+// const Navbar = ({ navOpen, toggleNav }) => (
+//   <nav className="bg-black bg-opacity-60 fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between">
+//     <div className="text-white font-bold text-xl">Fastighetsplattform AB</div>
+//     <button className="text-white text-2xl sm:hidden" onClick={toggleNav}>
+//       {navOpen ? <FaTimes /> : <FaBars />}
+//     </button>
+//     <div
+//       className={`absolute top-full left-0 w-full sm:w-auto sm:relative sm:flex sm:space-x-6 ${navOpen ? "block" : "hidden"
+//         } bg-black sm:bg-transparent`}
+//     >
+//       {/* Global links */}
+//       <a href="/Map" className="block text-white hover:text-gray-300 py-2 px-4">
+//         Karta
+//       </a>
+//       <a
+//         href="/Login"
+//         className="block text-white hover:text-gray-300 py-2 px-4"
+//       >
+//         Logga in
+//       </a>
 
-      {/* Page-specific links */}
-      <ScrollLink
-        to="hero"
-        smooth={true}
-        offset={-70}
-        duration={800}
-        className="block text-white hover:text-gray-300 py-2 px-4"
-      >
-        Hem
-      </ScrollLink>
-      <ScrollLink
-        to="services"
-        smooth={true}
-        offset={-70}
-        duration={800}
-        className="block text-white hover:text-gray-300 py-2 px-4"
-      >
-        Tjänster
-      </ScrollLink>
-      <ScrollLink
-        to="offers"
-        smooth={true}
-        offset={-70}
-        duration={800}
-        className="block text-white hover:text-gray-300 py-2 px-4"
-      >
-        Våra erbjudanden
-      </ScrollLink>
-      <ScrollLink
-        to="fireworks"
-        smooth={true}
-        offset={-70}
-        duration={800}
-        className="block text-white hover:text-gray-300 py-2 px-4"
-      >
-        Fyrverkeri
-      </ScrollLink>
-    </div>
-  </nav>
-);
+//       {/* Page-specific links */}
+//       <ScrollLink
+//         to="hero"
+//         smooth={true}
+//         offset={-70}
+//         duration={800}
+//         className="block text-white hover:text-gray-300 py-2 px-4"
+//       >
+//         Hem
+//       </ScrollLink>
+//       <ScrollLink
+//         to="services"
+//         smooth={true}
+//         offset={-70}
+//         duration={800}
+//         className="block text-white hover:text-gray-300 py-2 px-4"
+//       >
+//         Tjänster
+//       </ScrollLink>
+//       <ScrollLink
+//         to="offers"
+//         smooth={true}
+//         offset={-70}
+//         duration={800}
+//         className="block text-white hover:text-gray-300 py-2 px-4"
+//       >
+//         Våra erbjudanden
+//       </ScrollLink>
+//       <ScrollLink
+//         to="fireworks"
+//         smooth={true}
+//         offset={-70}
+//         duration={800}
+//         className="block text-white hover:text-gray-300 py-2 px-4"
+//       >
+//         Fyrverkeri
+//       </ScrollLink>
+//     </div>
+//   </nav>
+// );
 
 const HomePage = () => {
-  const [navOpen, setNavOpen] = useState(false);
+  // const [navOpen, setNavOpen] = useState(false);
   const [fireworksActive, setFireworksActive] = useState(false);
 
-  const toggleNav = () => setNavOpen(!navOpen);
+  // const toggleNav = () => setNavOpen(!navOpen);
 
   const triggerFireworks = () => {
     setFireworksActive(true);
@@ -79,7 +80,7 @@ const HomePage = () => {
 
   return (
     <div className="font-sans bg-gray-100 text-gray-800">
-      <Navbar navOpen={navOpen} toggleNav={toggleNav} />
+      {/* <Navbar navOpen={navOpen} toggleNav={toggleNav} /> */}
 
       {/* Hero Section */}
       <section
@@ -95,16 +96,22 @@ const HomePage = () => {
           transition={{ duration: 1 }}
         >
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6 leading-tight">
-            Utforska Fastighetsmarknaden Med Data-Drivna Insikter
+            Utforska Sveriges Kommuner Med Data-Driven Insikt
           </h1>
-          <p className="text-white text-lg sm:text-xl mb-6">
-            Vi erbjuder marknadsledande analys- och kartverktyg för att hjälpa
-            dig fatta välgrundade beslut på fastighetsmarknaden.
-          </p>
+          <div className="text-white text-lg sm:text-xl mb-6">
+            <ul className="list-none mt-4 space-y-2">
+              <li>✔ Utforska interaktiva kartor över kommunerna.</li>
+              <li>✔ Få tillgång till  statistik på brott, skolresultat och fastighetsmarknaden</li>
+              <li>✔ Lättanvända verktyg för att hämta ut rapporter.</li>
+            </ul>
+          </div>
+          <button className="bg-green-500 text-white font-semibold py-3 px-8 rounded-full hover:bg-green-600">
+            Börja Utforska
+          </button>
         </motion.div>
       </section>
 
-      {/* Services section */}
+      {/* data analys section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-8">
           <div className="flex flex-col md:flex-row items-center gap-8">
@@ -119,7 +126,7 @@ const HomePage = () => {
               <img
                 src="/data-analys.jpg"
                 alt="Dataanalys"
-                className="w-full rounded-lg shadow-md  transition-transform"
+                className="w-full rounded-lg shadow-md transition-transform"
               />
             </motion.div>
 
@@ -131,19 +138,32 @@ const HomePage = () => {
               transition={{ duration: 1, delay: 0.2 }}
               whileHover={{ scale: 1.05 }}
             >
-              <h2 className="text-3xl font-extrabold text-gray-800 mb-4">Dataanalys</h2>
+              <h2 className="text-3xl font-extrabold text-gray-800 mb-4">Skolresultat och Demografi</h2>
               <p className="text-gray-600 text-lg mb-4">
-                Med våra avancerade verktyg kan du analysera fastighetsmarknaden och få djupgående insikter.
+                Jämför skolstatistik som nationella provresultat med demografisk data
+                som genomsnittsålder och inkomstnivåer.
               </p>
-              <p className="text-gray-600 text-lg mb-4">
-                Vi samlar in och analyserar data från flera källor för att ge dig det bästa beslutsunderlaget.
-              </p>
+              <ul className="list-none list-disc list-inside text-gray-600 mb-4">
+                <li>✔ Nationella provresultat per kommun och årskurs.</li>
+                <li>✔ Medellivslängd och genomsnittsålder.</li>
+                <li>✔ Inkomstnivåer per hushåll.</li>
+              </ul>
+
+              <div className="mt-4">
+                <img src="/dataanalysexempel.jpg" alt="Exempel på dataanalys" className="w-full rounded-lg shadow-md" />
+              </div>
+              <button className="mt-4 bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600">
+                Läs mer
+              </button>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Service 2 */}
+
+
+
+      {/* kart sektion 2 */}
       <section className="py-16 bg-gray-100">
         <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-8">
           <div className="flex flex-col md:flex-row-reverse items-center gap-8">
@@ -152,13 +172,13 @@ const HomePage = () => {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false }}
-              transition={{ duration: 1,delay: 0.2 }}
+              transition={{ duration: 1, delay: 0.2 }}
               whileHover={{ scale: 1.05 }}
             >
               <img
                 src="/mapillustration.jpg"
                 alt="Karttjänster"
-                className="w-full rounded-lg shadow-md  transition-transform"
+                className="w-full rounded-lg shadow-md transition-transform"
               />
             </motion.div>
 
@@ -170,13 +190,19 @@ const HomePage = () => {
               transition={{ duration: 1, delay: 0.2 }}
               whileHover={{ scale: 1.05 }}
             >
-              <h2 className="text-3xl font-extrabold text-gray-800 mb-4">Karttjänster</h2>
+              <h2 className="text-3xl font-extrabold text-gray-800 mb-4">Interaktiva Karttjänster</h2>
               <p className="text-gray-600 text-lg mb-4">
-                Utforska vår interaktiva karta för att visualisera fastighetsdata på detaljnivå.
+                Upptäck nya insikter genom att kombinera data på kartan.
+                Jämför fastighetspriser, brottsstatistik och demografiska faktorer i realtid.
               </p>
-              <p className="text-gray-600 text-lg mb-4">
-                Våra karttjänster hjälper dig förstå området och dess potential.
-              </p>
+              <ul className="list-none list-disc list-inside text-gray-600 mb-4">
+                <li>✔ Anpassa kartvyn med olika lager.</li>
+                <li>✔ Visualisera data med färgkodning och grafer.</li>
+                <li>✔ Exportera analyser som rapporter.</li>
+              </ul>
+              <button className="mt-4 bg-green-500 text-white font-semibold py-2 px-4 rounded-full hover:bg-green-600">
+                Utforska Kartan
+              </button>
             </motion.div>
           </div>
         </div>
@@ -185,49 +211,186 @@ const HomePage = () => {
 
       {/* Offers Section */}
       <section id="offers" className="py-16 bg-gray-100">
-        <div className="max-w-7xl mx-auto px-4 text-center">
+        <div className="max-w-7xl mx-auto px-4">
           <motion.h2
-            className="text-4xl font-bold mb-8"
+            className="text-4xl font-bold mb-12 text-center"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
+            viewport={{ once: true }}
             transition={{ duration: 1 }}
           >
             Våra Viktigaste Erbjudanden
           </motion.h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[{
+          {[
+            {
               title: "Fastighetsanalys",
-              description: "Få djupgående insikter om marknaden för att fatta välgrundade beslut.",
+              description:
+                "Utforska fastighetsdata och trender från 2016–2023. Få insikter om priser, antal sålda bostäder och marknadens utveckling.",
+              image: "/fastighetsanalys.jpg",
+              details: [
+                "✔ Medelpriser per kommun och år",
+                "✔ Trender inom bostadsmarknaden",
+                "✔ Analyser av olika bostadstyper",
+              ],
             },
             {
               title: "Områdesdata",
-              description: "Analysera demografisk data och områdets utvecklingspotential.",
+              description:
+                "Analysera demografiska data som inkomst, ålder och livslängd för att förstå kommunens potential och utveckling.",
+              image: "/omradesdata.jpg",
+              details: [
+                "✔ Genomsnittsålder och medellivslängd",
+                "✔ Hushållsinkomster",
+                "✔ Befolkningsutveckling",
+              ],
             },
             {
-              title: "Prognoser",
-              description: "Få framtidsanalyser baserade på aktuella marknadstrender.",
+              title: "Rapporter och Visualiseringar",
+              description:
+                "Generera och exportera rapporter med lättanvända verktyg. Anpassa grafer och tabeller för att passa dina behov.",
+              image: "/rapporter.jpg",
+              details: [
+                "✔ Exportera PDF-rapporter",
+                "✔ Färdiga grafer och tabeller",
+                "✔ Anpassade analyser",
+              ],
             },
-            {
-              title: "Värderingar",
-              description: "Tillförlitliga fastighetsvärderingar som håller sig uppdaterade.",
-            }].map((offer, index) => (
+          ].map((offer, index) => (
+            <motion.div
+              key={index}
+              className="bg-white shadow-lg rounded-lg overflow-hidden mb-12 flex flex-col md:flex-row"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: index * 0.2 }}
+              whileHover={{ scale: 1.05 }}
+            >
+              <img
+                src={offer.image}
+                alt={offer.title}
+                className="md:w-1/2 object-cover"
+              />
+              <div className="p-6 md:w-1/2 flex flex-col justify-center">
+                <h3 className="text-2xl font-bold mb-4">{offer.title}</h3>
+                <p className="text-gray-700 mb-4">{offer.description}</p>
+                <ul className="list-none list-disc list-inside text-gray-600 mb-4">
+                  {offer.details.map((detail, i) => (
+                    <li key={i}>{detail}</li>
+                  ))}
+                </ul>
+                <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600">
+                  Läs Mer
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+
+      <section id="try" className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold mb-8">Prova På Vår Tjänst</h2>
+          <p className="text-gray-600 text-lg mb-12">
+            Testa en begränsad version av våra tjänster och upptäck hur vår plattform kan hjälpa dig.
+          </p>
+          <div className="space-y-8">
+            {[
+              {
+                title: "Utforska Kartan",
+                description:
+                  "Interagera med vår karta och se data om fastighetspriser och brottsstatistik i en utvald kommun. Utforska möjligheterna och lär känna våra funktioner.",
+                image: "/prova-karta.jpg",
+                buttonText: "Utforska Karta",
+              },
+              {
+                title: "Analysera Statistik",
+                description:
+                  "Utforska exempelrapporter och grafer som visar nationella provresultat och demografi. Få en känsla för våra analysverktyg.",
+                image: "/prova-statistik.jpg",
+                buttonText: "Prova Statistik",
+              },
+              {
+                title: "Skapa En Rapport",
+                description:
+                  "Generera en anpassad rapport baserad på utvald data om demografi och fastighetsmarknad. Perfekt för beslutsfattare och analyser.",
+                image: "/prova-rapport.jpg",
+                buttonText: "Skapa Rapport",
+              },
+            ].map((tryOption, index) => (
               <motion.div
                 key={index}
-                className="bg-white p-6 rounded-lg shadow-md"
+                className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row items-center"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }}
-                transition={{ duration: 1 }}
-                whileHover={{ scale: 1.05 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: index * 0.2 }}
               >
-                <h3 className="text-xl font-bold mb-4">{offer.title}</h3>
-                <p className="text-gray-700">{offer.description}</p>
+                <img
+                  src={tryOption.image}
+                  alt={tryOption.title}
+                  className="w-full md:w-1/2 object-cover h-64"
+                />
+                <div className="p-6 md:w-1/2">
+                  <h3 className="text-2xl font-bold mb-4">{tryOption.title}</h3>
+                  <p className="text-gray-700 mb-6">{tryOption.description}</p>
+                  <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600">
+                    {tryOption.buttonText}
+                  </button>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
+
+
+      <section id="insights" className="py-16 bg-gray-100">
+  <div className="max-w-7xl mx-auto px-4">
+    <h2 className="text-4xl font-bold mb-12 text-center">Senaste Insikter</h2>
+    <div className="space-y-8">
+      {[
+        {
+          title: "Fastighetspriser 2023",
+          description:
+            "Fastighetspriserna ökade med 5% i genomsnitt under 2023. Kommun X såg den största ökningen på 12%, medan Kommun Y hade en minskning på 3%.",
+          image: "/insight-fastighet.jpg",
+        },
+        {
+          title: "Brottsstatistik",
+          description:
+            "Brottsnivåerna minskade med 10% i genomsnitt under året, särskilt i Kommun Z som rapporterade 15% färre incidenter.",
+          image: "/insight-brott.jpg",
+        },
+        {
+          title: "Betygsförbättringar",
+          description:
+            "Nationella provresultat förbättrades med 4% i matematik för årskurs 9. Kommunerna i norra Sverige hade högst förbättringar.",
+          image: "/insight-skolor.jpg",
+        },
+      ].map((insight, index) => (
+        <motion.div
+          key={index}
+          className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row items-center"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: index * 0.2 }}
+        >
+          <img
+            src={insight.image}
+            alt={insight.title}
+            className="w-full md:w-1/2 object-cover h-64"
+          />
+          <div className="p-6 md:w-1/2">
+            <h3 className="text-2xl font-bold mb-4">{insight.title}</h3>
+            <p className="text-gray-700 mb-6">{insight.description}</p>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* Fireworks Section */}
       <section
@@ -259,8 +422,53 @@ const HomePage = () => {
         </div>
       )}
 
+      <section id="testimonials" className="py-16 bg-gray-100">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-8">Vad våra kunder säger</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Anna Svensson",
+                feedback: "Analyserna hjälpte mig hitta rätt fastighet snabbt.",
+              },
+              {
+                name: "Erik Johansson",
+                feedback: "Karttjänsterna gav oss insikter vi aldrig haft tidigare.",
+              },
+              {
+                name: "Maria Karlsson",
+                feedback: "Enkel och kraftfull plattform för fastighetsdata.",
+              },
+            ].map((testimonial, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-lg shadow-md"
+              >
+                <p className="italic mb-4">"{testimonial.feedback}"</p>
+                <p className="font-bold">- {testimonial.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
       {/* Footer */}
-      <footer id="contact" className="bg-gray-900 text-white py-8">
+  
+  <Footer/>
+
+      {/* <footer id="contact" className="bg-gray-900 text-white py-8">
+
+        <div className="mx-4 mb-4">
+          <form className="space-y-4">
+            <input type="text" placeholder="Namn" className="w-full p-3 rounded border" />
+            <input type="email" placeholder="E-post" className="w-full p-3 rounded border" />
+            <textarea placeholder="Ditt meddelande" className="w-full p-3 rounded border" rows="4"></textarea>
+            <button className="bg-green-500 text-white font-semibold py-2 px-6 rounded hover:bg-green-600">
+              Skicka
+            </button>
+          </form>
+        </div>
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div>
             <h3 className="font-bold text-lg mb-4">Fastighetsplattform AB</h3>
@@ -285,7 +493,7 @@ const HomePage = () => {
           © {new Date().getFullYear()} Fastighetsplattform AB. Alla rättigheter
           reserverade.
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 };

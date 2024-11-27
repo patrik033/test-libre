@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete'
 import '@geoapify/geocoder-autocomplete/styles/minimal.css'
-
+import Footer from '@/components/UI/Footer/Footer';
 
 import Sidebar from '../../components/UI/Sidebar';
 import { getFeatureBounds } from './MapUtils';

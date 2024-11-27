@@ -2,7 +2,8 @@
 
 
 import { useState, useEffect } from 'react';
-
+import Navbar from '@/components/UI/Navbar/Navbar';
+import Footer from '@/components/UI/Footer/Footer';
 import HomePage from "@/components/UI/HomePage";
 export default function Home() {
 
@@ -10,7 +11,9 @@ export default function Home() {
 
   return (
       <div >
+      
         <HomePage/>
+  
         {/* <MapBoundaries /> */}
 
         {/* <MapComponent/> */}
