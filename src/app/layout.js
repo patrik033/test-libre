@@ -1,29 +1,30 @@
 "use client";
 
-import Navbar from "@/components/UI/Navbar/Navbar"; // Din globala navbar-komponent
-import Footer from "@/components/UI/Footer/Footer"; // Din globala footer-komponent
+import Navbar from "@/components/UI/Navbar/Navbar"; // Globala navbar-komponenten
+import Footer from "@/components/UI/Footer/Footer"; // Globala footer-komponenten
+import { usePathname } from "next/navigation";
 import "./globals.css";
 
 export default function RootLayout({ children }) {
+  const pathname = usePathname();
+
+  // Kontrollera om sidan är en del av dashboard
+  const isDashboard = pathname.startsWith("/Dashboard");
+
   return (
     <html lang="en">
-      <body className="relative">
-        {/* Navbar */}
-        <Navbar />
+      <body>
+        {/* Visa bara den globala navbaren om vi inte är i dashboard */}
+        {!isDashboard && <Navbar />}
 
-        {/* Main Content Wrapper */}
-        <main
-          className="min-h-screen"
-          style={{
-            paddingTop: "64px", // Kompensera för navbar-höjden
-            //paddingBottom: "80px", // Kompensera för footer-höjden
-          }}
-        >
+        {/* Main Content */}
+        <div style={{ paddingTop: !isDashboard ? "64px" : "0" }}>
           {children}
-        </main>
+        </div>
 
         {/* Footer */}
-        <Footer />
+        {!isDashboard && <Footer />}
+        
       </body>
     </html>
   );
