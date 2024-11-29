@@ -1,260 +1,116 @@
-import React, { useState, useEffect } from 'react';
-import { Pie, Bar, Line } from 'react-chartjs-2';
-import Select from 'react-select';
-import { Switch } from '@headlessui/react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, LineElement, PointElement } from 'chart.js';
+import React, { useState, useEffect } from "react";
+import { Pie, Bar, Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+} from "chart.js";
 
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, LineElement, PointElement);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement
+);
 
 const Dashboard = () => {
   const [isClient, setIsClient] = useState(false);
-
-  // Filter state
-  const [selectedYears, setSelectedYears] = useState([{ label: '2023', value: '2023' }]);
-  const [selectedSubjects, setSelectedSubjects] = useState([{ label: 'All', value: 'All' }]);
-  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState([{ label: 'All', value: 'All' }]);
-  const [isDescending, setIsDescending] = useState(true);
-
-  // Original exempeldata för åren 2019-2024
-  const propertySalesRawData = [
-    { year: '2023', type: 'Lägenheter', sales: 150 },
-    { year: '2023', type: 'Villor', sales: 90 },
-    { year: '2023', type: 'Radhus', sales: 40 },
-    { year: '2022', type: 'Lägenheter', sales: 140 },
-    { year: '2022', type: 'Villor', sales: 85 },
-    { year: '2022', type: 'Radhus', sales: 42 },
-    { year: '2021', type: 'Lägenheter', sales: 130 },
-    { year: '2021', type: 'Villor', sales: 80 },
-    { year: '2021', type: 'Radhus', sales: 38 },
-    { year: '2020', type: 'Lägenheter', sales: 125 },
-    { year: '2020', type: 'Villor', sales: 77 },
-    { year: '2020', type: 'Radhus', sales: 36 },
-    { year: '2019', type: 'Lägenheter', sales: 120 },
-    { year: '2019', type: 'Villor', sales: 75 },
-    { year: '2019', type: 'Radhus', sales: 32 },
-
-    // Fler datapunkter för åren 2019-2024 ...
-  ];
-
-  const lifeExpectancyRawData = [
-    { year: '2023', male: 80, female: 85, total: 82.5 },
-    { year: '2022', male: 79.8, female: 84.6, total: 82.2 },
-    { year: '2021', male: 79.5, female: 84.3, total: 81.9 },
-    { year: '2020', male: 79.2, female: 84.0, total: 81.6 },
-    { year: '2019', male: 79.0, female: 83.8, total: 81.4 },
-
-    // Fler datapunkter för åren 2019-2024 ...
-  ];
-
-  const crimeRawData = [
-    { year: '2023', type: 'Stöld', cases: 400 },
-    { year: '2023', type: 'Våldsbrott', cases: 200 },
-    { year: '2022', type: 'Stöld', cases: 380 },
-    { year: '2022', type: 'Våldsbrott', cases: 190 },
-    { year: '2021', type: 'Stöld', cases: 360 },
-    { year: '2021', type: 'Våldsbrott', cases: 180 },
-    { year: '2020', type: 'Stöld', cases: 340 },
-    { year: '2020', type: 'Våldsbrott', cases: 170 },
-    { year: '2019', type: 'Stöld', cases: 320 },
-    { year: '2019', type: 'Våldsbrott', cases: 160 },
-  ];
-
-  const schoolResultsRawData = [
-    { year: '2023', school: 'Skola A', subject: 'Svenska', level: 'Year9', totalGrade: 14.2, femaleGrade: 15.3, maleGrade: 13.5 },
-    { year: '2023', school: 'Skola A', subject: 'Matematik', level: 'Year9', totalGrade: 13.8, femaleGrade: 14.5, maleGrade: 13.0 },
-    { year: '2022', school: 'Skola B', subject: 'Engelska', level: 'Year6', totalGrade: 16.0, femaleGrade: 16.8, maleGrade: 15.5 },
-    { year: '2021', school: 'Skola A', subject: 'Svenska', level: 'Year6', totalGrade: 15.0, femaleGrade: 15.5, maleGrade: 14.5 },
-    { year: '2020', school: 'Skola C', subject: 'Matematik', level: 'Year9', totalGrade: 14.5, femaleGrade: 15.1, maleGrade: 13.9 },
-    { year: '2019', school: 'Skola D', subject: 'Engelska', level: 'Year6', totalGrade: 15.8, femaleGrade: 16.3, maleGrade: 15.3 },
-  ];
-
-  const avgPriceRawData = [
-    { year: '2023', type: 'Lägenheter', price: 2900 },
-    { year: '2023', type: 'Villor', price: 4000 },
-    { year: '2023', type: 'Radhus', price: 3100 },
-    { year: '2022', type: 'Lägenheter', price: 2800 },
-    { year: '2022', type: 'Villor', price: 3900 },
-    { year: '2022', type: 'Radhus', price: 3000 },
-    { year: '2021', type: 'Lägenheter', price: 2700 },
-    { year: '2021', type: 'Villor', price: 3800 },
-    { year: '2021', type: 'Radhus', price: 2900 },
-    { year: '2020', type: 'Lägenheter', price: 2500 },
-    { year: '2020', type: 'Villor', price: 3700 },
-    { year: '2020', type: 'Radhus', price: 2800 },
-    { year: '2019', type: 'Lägenheter', price: 2400 },
-    { year: '2019', type: 'Villor', price: 3600 },
-    { year: '2019', type: 'Radhus', price: 2700 },
-    // Fler datapunkter för genomsnittliga priser per år och typ ...
-  ];
-
-  const incomeRawData = [
-    { year: '2023', income: 345 },
-    { year: '2022', income: 335 },
-    { year: '2021', income: 325 },
-    { year: '2020', income: 323 },
-    { year: '2019', income: 319 },
-    // Fler datapunkter för inkomst per år ...
-  ];
-
-  // Filtrera data baserat på valda filter
-  const filteredPropertySalesData = propertySalesRawData.filter(
-    (item) =>
-      (selectedYears.length === 0 || selectedYears.some((year) => year.value === item.year)) &&
-      (selectedPropertyTypes.length === 0 || selectedPropertyTypes.some((type) => type.value === item.type || type.value === 'All'))
-  );
-
-  const filteredLifeExpectancyData = lifeExpectancyRawData.filter((item) =>
-    selectedYears.length === 0 || selectedYears.some((year) => year.value === item.year)
-  );
-
-  const filteredCrimeData = crimeRawData.filter((item) =>
-    selectedYears.length === 0 || selectedYears.some((year) => year.value === item.year)
-  );
-
-  const filteredAvgPriceData = avgPriceRawData.filter(
-    (item) =>
-      (selectedYears.length === 0 || selectedYears.some((year) => year.value === item.year)) &&
-      (selectedPropertyTypes.length === 0 || selectedPropertyTypes.some((type) => type.value === item.type || type.value === 'All'))
-  );
-
-  const filteredIncomeData = incomeRawData.filter((item) =>
-    selectedYears.length === 0 || selectedYears.some((year) => year.value === item.year)
-  );
-
-  const filteredSchoolResultsData = schoolResultsRawData.filter(
-    (result) =>
-      selectedYears.some((year) => year.value === result.year) &&
-      selectedSubjects.some((subject) => subject.value === result.subject || subject.value === 'All')
-  );
-
-  
-
-  // Skapa diagramdata
-  const propertySalesChartData = {
-    labels: [...new Set(filteredPropertySalesData.map((item) => item.type))],
-    datasets: selectedYears.map((year) => ({
-      label: `Antal Försäljningar ${year.value}`,
-      data: filteredPropertySalesData
-        .filter((item) => item.year === year.value)
-        .map((item) => item.sales),
-      backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
-    })),
-  };
-
-  const lifeExpectancyChartData = {
-    labels: selectedYears.map((year) => year.value),
-    datasets: [
-      {
-        label: 'Män',
-        data: filteredLifeExpectancyData.map((item) => item.male),
-        backgroundColor: '#36A2EB',
-      },
-      {
-        label: 'Kvinnor',
-        data: filteredLifeExpectancyData.map((item) => item.female),
-        backgroundColor: '#FF6384',
-      },
-      {
-        label: 'Totalt',
-        data: filteredLifeExpectancyData.map((item) => item.total),
-        backgroundColor: '#FFCE56',
-      },
-    ],
-  };
-
-  const crimeChartData = {
-    labels: [...new Set(filteredCrimeData.map((item) => item.type))],
-    datasets: selectedYears.map((year) => ({
-      label: `Antal Brott ${year.value}`,
-      data: filteredCrimeData
-        .filter((item) => item.year === year.value)
-        .map((item) => item.cases),
-      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-    })),
-  };
-
-  const avgPriceChartData = {
-    labels: [...new Set(filteredAvgPriceData.map((item) => item.type))],
-    datasets: selectedYears.map((year) => ({
-      label: `Genomsnittligt Pris ${year.value} (tusentals kr)`,
-      data: filteredAvgPriceData
-        .filter((item) => item.year === year.value)
-        .map((item) => item.price),
-      backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
-    })),
-  };
-
-  const incomeChartData = {
-    labels: selectedYears.map((year) => year.value),
-    datasets: [
-      {
-        label: 'Genomsnittlig Inkomst (tusentals kr)',
-        data: filteredIncomeData.map((item) => item.income),
-        backgroundColor: '#4BC0C0',
-      },
-    ],
-  };
-
-  const schoolResultsChartData = {
-    labels: filteredSchoolResultsData.map((data) => `${data.school} - ${data.subject} (${data.year})`),
-    datasets: [
-      {
-        label: 'Totalt',
-        data: filteredSchoolResultsData.map((data) => data.totalGrade),
-        backgroundColor: '#36A2EB',
-      },
-      {
-        label: 'Kvinnor',
-        data: filteredSchoolResultsData.map((data) => data.femaleGrade),
-        backgroundColor: '#FF6384',
-      },
-      {
-        label: 'Män',
-        data: filteredSchoolResultsData.map((data) => data.maleGrade),
-        backgroundColor: '#FFCE56',
-      },
-    ],
-  };
-
-  const yearOptions = [
-    { label: '2023', value: '2023' },
-    { label: '2022', value: '2022' },
-    { label: '2021', value: '2021' },
-    { label: '2020', value: '2020' },
-    { label: '2019', value: '2019' },
-  ];
-
-  const subjectOptions = [
-    { label: 'Svenska', value: 'Svenska' },
-    { label: 'Matematik', value: 'Matematik' },
-    { label: 'Engelska', value: 'Engelska' },
-    { label: 'All', value: 'All' },
-  ];
-
-  const propertyTypeOptions = [
-    { label: 'Lägenheter', value: 'Lägenheter' },
-    { label: 'Villor', value: 'Villor' },
-    { label: 'Radhus', value: 'Radhus' },
-    { label: 'All', value: 'All' },
-  ];
-
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const handleYearChange = (selectedOptions) => {
-    const sortedOptions = selectedOptions.sort((a, b) =>
-      isDescending ? b.value - a.value : a.value - b.value
-    );
-    setSelectedYears(sortedOptions);
+  // Exempeldata för KPI-korten
+  const totalSales = 280; // Summa av försäljningar
+  const avgLifeExpectancy = 82.5; // Genomsnittlig livslängd
+  const avgIncome = 345; // Genomsnittlig inkomst i tusentals kr
+  const totalCrimes = 600; // Totalt antal brott i år
+
+  // Exempeldata för diagrammen
+  const propertySalesData = {
+    labels: ["Lägenheter", "Villor", "Radhus"],
+    datasets: [
+      {
+        label: "Antal Försäljningar 2023",
+        data: [150, 90, 40],
+        backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
+      },
+    ],
   };
 
-  const toggleSortOrder = () => {
-    setIsDescending(!isDescending);
-    handleYearChange(selectedYears);
+  const crimeData = {
+    labels: ["Stöld", "Våldsbrott"],
+    datasets: [
+      {
+        label: "Antal Brott 2023",
+        data: [400, 200],
+        backgroundColor: ["#FF6384", "#36A2EB"],
+      },
+    ],
   };
 
+  const avgPriceData = {
+    labels: ["Lägenheter", "Villor", "Radhus"],
+    datasets: [
+      {
+        label: "Genomsnittliga Priser (tusentals kr)",
+        data: [2900, 4000, 3100],
+        backgroundColor: ["#4BC0C0", "#FF6384", "#36A2EB"],
+      },
+    ],
+  };
+
+  const incomeData = {
+    labels: ["2019", "2020", "2021", "2022", "2023"],
+    datasets: [
+      {
+        label: "Genomsnittlig Inkomst (tusentals kr)",
+        data: [319, 323, 325, 335, 345],
+        backgroundColor: "#4BC0C0",
+      },
+    ],
+  };
+
+  const lifeExpectancyData = {
+    labels: ["Män", "Kvinnor", "Totalt"],
+    datasets: [
+      {
+        label: "Förväntad Livslängd 2023",
+        data: [80, 85, 82.5],
+        backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
+      },
+    ],
+  };
+
+  const schoolResultsData = {
+    labels: ["Svenska", "Matematik", "Engelska"],
+    datasets: [
+      {
+        label: "Snittbetyg för Årskurs 9 (2023)",
+        data: [14.2, 13.8, 16.0],
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+      },
+    ],
+  };
+
+  const topSchoolsData = {
+    labels: ["Skola A", "Skola B", "Skola C"],
+    datasets: [
+      {
+        label: "Betyg för bästa skolor 2023",
+        data: [16.8, 15.5, 14.5],
+        backgroundColor: ["#4BC0C0", "#9966FF", "#FFCE56"],
+      },
+    ],
+  };
 
   if (!isClient) {
     return null;
@@ -262,71 +118,70 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container p-6 bg-gray-100">
-      <h2 className="text-2xl font-bold mb-6">Statistik Dashboard (Exempeldata)</h2>
+      <h2 className="text-2xl font-bold mb-6">Statistik Dashboard</h2>
 
-      <div className="filters-container mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Select options={yearOptions} isMulti placeholder="Välj år..." value={selectedYears} onChange={handleYearChange} />
-        <Select options={subjectOptions} isMulti placeholder="Välj ämne..." value={selectedSubjects} onChange={setSelectedSubjects} />
-        <Select options={propertyTypeOptions} isMulti placeholder="Välj bostadstyp..." value={selectedPropertyTypes} onChange={setSelectedPropertyTypes} />
-      </div>
-      <div className="sort-order-toggle mb-6 flex items-center space-x-2">
-        <span>Stigande</span>
-        <Switch
-          checked={isDescending}
-          onChange={toggleSortOrder}
-          className={`${
-            isDescending ? 'bg-blue-600' : 'bg-gray-300'
-          } relative inline-flex h-6 w-11 items-center rounded-full`}
-        >
-          <span
-            className={`${
-              isDescending ? 'translate-x-6' : 'translate-x-1'
-            } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-          />
-        </Switch>
-        <span>Fallande</span>
+      {/* KPI-kort högst upp */}
+      <div className="kpi-container grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="kpi-card bg-white p-4 rounded shadow text-center">
+          <h3 className="text-lg font-semibold">Totala Försäljningar</h3>
+          <p className="text-3xl font-bold">{totalSales}</p>
+        </div>
+        <div className="kpi-card bg-white p-4 rounded shadow text-center">
+          <h3 className="text-lg font-semibold">Genomsnittlig Livslängd</h3>
+          <p className="text-3xl font-bold">{avgLifeExpectancy} år</p>
+        </div>
+        <div className="kpi-card bg-white p-4 rounded shadow text-center">
+          <h3 className="text-lg font-semibold">Genomsnittlig Inkomst</h3>
+          <p className="text-3xl font-bold">{avgIncome} tkr</p>
+        </div>
+        <div className="kpi-card bg-white p-4 rounded shadow text-center">
+          <h3 className="text-lg font-semibold">Antal Brott i År</h3>
+          <p className="text-3xl font-bold">{totalCrimes}</p>
+        </div>
       </div>
 
+      {/* Diagram-sektionen */}
       <div className="charts-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Diagram för bostadsförsäljningar */}
+        {/* Diagram 1: Fastighetsförsäljningar */}
         <div className="chart bg-white p-4 rounded shadow">
-          <h3 className="text-xl font-semibold mb-2">Bostadsförsäljningar per Typ</h3>
-          <Pie data={propertySalesChartData} />
+          <h3 className="text-xl font-semibold mb-2">Fastighetsförsäljningar</h3>
+          <Pie data={propertySalesData} />
         </div>
 
-        {/* Diagram för genomsnittliga bostadspriser */}
+        {/* Diagram 2: Brottsstatistik */}
         <div className="chart bg-white p-4 rounded shadow">
-          <h3 className="text-xl font-semibold mb-2">Genomsnittligt Pris över Tid</h3>
-          <Bar data={avgPriceChartData} options={{ scales: { y: { beginAtZero: true } } }} />
+          <h3 className="text-xl font-semibold mb-2">Brottsfördelning</h3>
+          <Bar data={crimeData} options={{ scales: { y: { beginAtZero: true } } }} />
         </div>
 
-        {/* Diagram för brottsfördelning */}
+        {/* Diagram 3: Genomsnittliga priser */}
         <div className="chart bg-white p-4 rounded shadow">
-          <h3 className="text-xl font-semibold mb-2">Brottsfördelning i Kommunen</h3>
-          <Pie data={crimeChartData} />
+          <h3 className="text-xl font-semibold mb-2">Genomsnittliga Fastighetspriser</h3>
+          <Bar data={avgPriceData} options={{ scales: { y: { beginAtZero: true } } }} />
         </div>
 
+        {/* Diagram 4: Inkomstdata */}
         <div className="chart bg-white p-4 rounded shadow">
-          <h3 className="text-xl font-semibold mb-2">Skolresultat</h3>
-          <Bar data={schoolResultsChartData} options={{ scales: { y: { beginAtZero: true, max: 20 } } }} />
+          <h3 className="text-xl font-semibold mb-2">Inkomster över tid</h3>
+          <Line data={incomeData} options={{ scales: { y: { beginAtZero: true } } }} />
         </div>
 
-        {/* Diagram för förväntad livslängd */}
+        {/* Diagram 5: Livslängdsdata */}
         <div className="chart bg-white p-4 rounded shadow">
           <h3 className="text-xl font-semibold mb-2">Förväntad Livslängd</h3>
-          <Bar data={lifeExpectancyChartData} options={{ indexAxis: 'y', scales: { x: { beginAtZero: true, max: 100 } } }} />
+          <Bar data={lifeExpectancyData} options={{ indexAxis: "y", scales: { x: { beginAtZero: true, max: 100 } } }} />
         </div>
 
-        {/* Diagram för inkomst över tid */}
+        {/* Diagram 6: Skolresultat */}
         <div className="chart bg-white p-4 rounded shadow">
-          <h3 className="text-xl font-semibold mb-2">Genomsnittlig Inkomst över Tid</h3>
-          <Line data={incomeChartData} options={{ scales: { y: { beginAtZero: true } } }} />
+          <h3 className="text-xl font-semibold mb-2">Skolresultat</h3>
+          <Bar data={schoolResultsData} options={{ scales: { y: { beginAtZero: true, max: 20 } } }} />
         </div>
 
-        {/* Diagram för skolresultat */}
+        {/* Diagram 7: Bästa skolor */}
         <div className="chart bg-white p-4 rounded shadow">
-          <h3 className="text-xl font-semibold mb-2">Skolresultat (Årskurs 6 & 9)</h3>
-          <Bar data={schoolResultsChartData} options={{ scales: { y: { beginAtZero: true, max: 20 } } }} />
+          <h3 className="text-xl font-semibold mb-2">Topp 3 Skolor</h3>
+          <Bar data={topSchoolsData} options={{ scales: { y: { beginAtZero: true, max: 20 } } }} />
         </div>
       </div>
     </div>

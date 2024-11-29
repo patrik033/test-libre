@@ -455,7 +455,7 @@ const HomePage = () => {
 
       {/* Footer */}
   
-  <Footer/>
+  {/* <Footer/> */}
 
       {/* <footer id="contact" className="bg-gray-900 text-white py-8">
 
