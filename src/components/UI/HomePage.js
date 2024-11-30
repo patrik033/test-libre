@@ -3,69 +3,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { Link as ScrollLink } from "react-scroll";
 import { motion } from "framer-motion";
 import Fireworks from "@fireworks-js/react";
-import Footer from "./Footer/Footer";
 
-// const Navbar = ({ navOpen, toggleNav }) => (
-//   <nav className="bg-black bg-opacity-60 fixed top-0 left-0 right-0 z-50 p-4 flex items-center justify-between">
-//     <div className="text-white font-bold text-xl">Fastighetsplattform AB</div>
-//     <button className="text-white text-2xl sm:hidden" onClick={toggleNav}>
-//       {navOpen ? <FaTimes /> : <FaBars />}
-//     </button>
-//     <div
-//       className={`absolute top-full left-0 w-full sm:w-auto sm:relative sm:flex sm:space-x-6 ${navOpen ? "block" : "hidden"
-//         } bg-black sm:bg-transparent`}
-//     >
-//       {/* Global links */}
-//       <a href="/Map" className="block text-white hover:text-gray-300 py-2 px-4">
-//         Karta
-//       </a>
-//       <a
-//         href="/Login"
-//         className="block text-white hover:text-gray-300 py-2 px-4"
-//       >
-//         Logga in
-//       </a>
-
-//       {/* Page-specific links */}
-//       <ScrollLink
-//         to="hero"
-//         smooth={true}
-//         offset={-70}
-//         duration={800}
-//         className="block text-white hover:text-gray-300 py-2 px-4"
-//       >
-//         Hem
-//       </ScrollLink>
-//       <ScrollLink
-//         to="services"
-//         smooth={true}
-//         offset={-70}
-//         duration={800}
-//         className="block text-white hover:text-gray-300 py-2 px-4"
-//       >
-//         Tjänster
-//       </ScrollLink>
-//       <ScrollLink
-//         to="offers"
-//         smooth={true}
-//         offset={-70}
-//         duration={800}
-//         className="block text-white hover:text-gray-300 py-2 px-4"
-//       >
-//         Våra erbjudanden
-//       </ScrollLink>
-//       <ScrollLink
-//         to="fireworks"
-//         smooth={true}
-//         offset={-70}
-//         duration={800}
-//         className="block text-white hover:text-gray-300 py-2 px-4"
-//       >
-//         Fyrverkeri
-//       </ScrollLink>
-//     </div>
-//   </nav>
-// );
 
 const HomePage = () => {
   // const [navOpen, setNavOpen] = useState(false);
@@ -82,6 +20,11 @@ const HomePage = () => {
     <div className="font-sans bg-gray-100 text-gray-800">
       {/* <Navbar navOpen={navOpen} toggleNav={toggleNav} /> */}
 
+
+
+
+      
+
       {/* Hero Section */}
       <section
         id="hero"
@@ -95,7 +38,7 @@ const HomePage = () => {
           viewport={{ once: false }}
           transition={{ duration: 1 }}
         >
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-6 leading-tight">
+          <h1 className="max-w-5xl text-4xl sm:text-5xl font-extrabold text-white mb-6  leading-tight">
             Utforska Sveriges Kommuner Med Data-Driven Insikt
           </h1>
           <div className="text-white text-lg sm:text-xl mb-6">
@@ -105,15 +48,15 @@ const HomePage = () => {
               <li>✔ Lättanvända verktyg för att hämta ut rapporter.</li>
             </ul>
           </div>
-          <button className="bg-green-500 text-white font-semibold py-3 px-8 rounded-full hover:bg-green-600">
+          <button className="dark:text-white bg-indigo-600 inline-flex text-gray-900 text-center font-semibold py-3 px-8 rounded-lg  hover:bg-gray-100 border-gray-300 focus:ring-4 focus:ring-gray-100">
             Börja Utforska
           </button>
         </motion.div>
       </section>
 
       {/* data analys section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-8">
+      <section className="py-4 ">
+        <div className=" mx-auto bg-white rounded-lg shadow-lg p-8">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <motion.div
               className="md:w-1/2"
@@ -164,8 +107,8 @@ const HomePage = () => {
 
 
       {/* kart sektion 2 */}
-      <section className="py-16 bg-gray-100">
-        <div className="max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-8">
+      <section className="py-4 ">
+        <div className=" mx-auto bg-white rounded-lg shadow-lg p-8">
           <div className="flex flex-col md:flex-row-reverse items-center gap-8">
             <motion.div
               className="md:w-1/2"
@@ -210,8 +153,8 @@ const HomePage = () => {
 
 
       {/* Offers Section */}
-      <section id="offers" className="py-16 bg-gray-100">
-        <div className="max-w-7xl mx-auto px-4">
+      <section id="offers" className="py-4 ">
+        <div className="mx-auto px-4">
           <motion.h2
             className="text-4xl font-bold mb-12 text-center"
             initial={{ opacity: 0, y: 50 }}
@@ -346,51 +289,51 @@ const HomePage = () => {
 
 
       <section id="insights" className="py-16 bg-gray-100">
-  <div className="max-w-7xl mx-auto px-4">
-    <h2 className="text-4xl font-bold mb-12 text-center">Senaste Insikter</h2>
-    <div className="space-y-8">
-      {[
-        {
-          title: "Fastighetspriser 2023",
-          description:
-            "Fastighetspriserna ökade med 5% i genomsnitt under 2023. Kommun X såg den största ökningen på 12%, medan Kommun Y hade en minskning på 3%.",
-          image: "/insight-fastighet.jpg",
-        },
-        {
-          title: "Brottsstatistik",
-          description:
-            "Brottsnivåerna minskade med 10% i genomsnitt under året, särskilt i Kommun Z som rapporterade 15% färre incidenter.",
-          image: "/insight-brott.jpg",
-        },
-        {
-          title: "Betygsförbättringar",
-          description:
-            "Nationella provresultat förbättrades med 4% i matematik för årskurs 9. Kommunerna i norra Sverige hade högst förbättringar.",
-          image: "/insight-skolor.jpg",
-        },
-      ].map((insight, index) => (
-        <motion.div
-          key={index}
-          className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row items-center"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: index * 0.2 }}
-        >
-          <img
-            src={insight.image}
-            alt={insight.title}
-            className="w-full md:w-1/2 object-cover h-64"
-          />
-          <div className="p-6 md:w-1/2">
-            <h3 className="text-2xl font-bold mb-4">{insight.title}</h3>
-            <p className="text-gray-700 mb-6">{insight.description}</p>
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-4xl font-bold mb-12 text-center">Senaste Insikter</h2>
+          <div className="space-y-8">
+            {[
+              {
+                title: "Fastighetspriser 2023",
+                description:
+                  "Fastighetspriserna ökade med 5% i genomsnitt under 2023. Kommun X såg den största ökningen på 12%, medan Kommun Y hade en minskning på 3%.",
+                image: "/insight-fastighet.jpg",
+              },
+              {
+                title: "Brottsstatistik",
+                description:
+                  "Brottsnivåerna minskade med 10% i genomsnitt under året, särskilt i Kommun Z som rapporterade 15% färre incidenter.",
+                image: "/insight-brott.jpg",
+              },
+              {
+                title: "Betygsförbättringar",
+                description:
+                  "Nationella provresultat förbättrades med 4% i matematik för årskurs 9. Kommunerna i norra Sverige hade högst förbättringar.",
+                image: "/insight-skolor.jpg",
+              },
+            ].map((insight, index) => (
+              <motion.div
+                key={index}
+                className="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row items-center"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: index * 0.2 }}
+              >
+                <img
+                  src={insight.image}
+                  alt={insight.title}
+                  className="w-full md:w-1/2 object-cover h-64"
+                />
+                <div className="p-6 md:w-1/2">
+                  <h3 className="text-2xl font-bold mb-4">{insight.title}</h3>
+                  <p className="text-gray-700 mb-6">{insight.description}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
-      ))}
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
       {/* Fireworks Section */}
       <section
@@ -454,8 +397,8 @@ const HomePage = () => {
 
 
       {/* Footer */}
-  
-  {/* <Footer/> */}
+
+      {/* <Footer/> */}
 
       {/* <footer id="contact" className="bg-gray-900 text-white py-8">
 
