@@ -3,13 +3,13 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { Link as ScrollLink } from "react-scroll";
 import { motion } from "framer-motion";
 import Fireworks from "@fireworks-js/react";
+import Link from "next/link";
 
 
 const HomePage = () => {
-  // const [navOpen, setNavOpen] = useState(false);
+
   const [fireworksActive, setFireworksActive] = useState(false);
 
-  // const toggleNav = () => setNavOpen(!navOpen);
 
   const triggerFireworks = () => {
     setFireworksActive(true);
@@ -62,9 +62,9 @@ const HomePage = () => {
         className="relative py-16 bg-gradient-to-b from-gray-800 via-gray-700 to-gray-600 text-white"
       >
         {/* Overlay för mjuk övergång */}
-        <div className="absolute top-0 w-full h-16 bg-gradient-to-b from-transparent via-gray-700 to-gray-800 opacity-90"></div>
+        <div className="absolute  w-full  bg-gradient-to-b from-transparent via-gray-700 to-gray-800 opacity-90"></div>
 
-        <div className="max-w-7xl mx-auto text-center px-6 lg:px-0">
+        <div className="max-w-screen-2xl mx-auto text-center px-6 ">
           <h2 className="text-4xl font-bold mb-6">Utforska Vår Plattform</h2>
           <p className="text-lg mb-8 text-gray-300">
             Kombinera dataanalys och karttjänster för att upptäcka nya insikter. Utforska fastighetsmarknaden, skolresultat och demografi på ett visuellt och enkelt sätt.
@@ -80,11 +80,11 @@ const HomePage = () => {
               transition={{ duration: 1 }}
             >
               {/* Bild med gradient-overlay */}
-              <div className="relative w-full mb-4">
+              <div className="relative w-full  mb-4">
                 <img
                   src="/data-analys.jpg"
                   alt="Dataanalys"
-                  className="rounded-lg w-full shadow-md object-cover h-64"
+                  className="rounded-lg w-full shadow-md object-cover h-[50vh]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-75 rounded-lg"></div>
               </div>
@@ -110,7 +110,7 @@ const HomePage = () => {
                 <img
                   src="/mapillustration.jpg"
                   alt="Karttjänster"
-                  className="rounded-lg w-full shadow-md object-cover h-64"
+                  className="rounded-lg w-full shadow-md object-cover h-[50vh]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-75 rounded-lg"></div>
               </div>
@@ -128,7 +128,7 @@ const HomePage = () => {
 
       {/* Offers Section */}
       <section id="offers" className="relative py-16 bg-gray-600 text-white">
-        <div className="max-w-7xl mx-auto text-center px-6 lg:px-0">
+        <div className="max-w-screen-2xl mx-auto text-center px-6 ">
           <h2 className="text-4xl font-bold mb-6">Våra Tjänster</h2>
           <p className="text-lg mb-8 text-gray-300">
             Upptäck de viktigaste funktionerna som vår plattform erbjuder och börja analysera data på ett nytt sätt.
@@ -225,9 +225,9 @@ const HomePage = () => {
 
       <section
         id="try"
-        className="relative py-16 bg-gradient-to-b from-gray-600 via-gray-500 to-gray-400 text-white"
+        className="relative py-16 bg-gradient-to-b from-gray-600  to-gray-700 text-white"
       >
-        <div className="max-w-7xl mx-auto text-center px-6 lg:px-0">
+        <div className="max-w-screen-2xl mx-auto text-center px-6 ">
           <h2 className="text-4xl font-bold mb-6">Prova Vår Plattform</h2>
           <p className="text-lg mb-8 text-gray-300">
             Testa en begränsad version av våra tjänster och upptäck hur vår plattform
@@ -320,7 +320,7 @@ const HomePage = () => {
             ].map((tryItem, index) => (
               <div
                 key={index}
-                className="relative bg-gradient-to-t from-gray-500 via-gray-600 to-gray-700 shadow-lg rounded-lg p-6 flex flex-col items-center"
+                className="relative bg-gradient-to-t from-gray-600 via-gray-700 to-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center"
               >
                 <div className="mb-4">{tryItem.icon}</div>
                 <h3 className="text-2xl font-bold mb-4 text-gray-100">
@@ -343,11 +343,11 @@ const HomePage = () => {
 
       <section
         id="insights"
-        className="py-16 bg-gradient-to-b from-gray-400 via-gray-300 to-gray-200 text-gray-900"
+        className="py-16 bg-gradient-to-b from-gray-700 via-gray-600  to-gray-500 text-gray-900"
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-0">
-          <h2 className="text-4xl font-bold mb-6 text-center text-gray-800">Senaste Insikter</h2>
-          <p className="text-center text-gray-600 mb-8">
+        <div className="max-w-screen-2xl mx-auto px-6 ">
+          <h2 className="text-4xl font-bold mb-6 text-center text-gray-100">Senaste Insikter</h2>
+          <p className="text-center text-gray-200 mb-8">
             Håll dig uppdaterad med de senaste trenderna och insikterna från Sveriges kommuner.
           </p>
 
@@ -360,6 +360,10 @@ const HomePage = () => {
                 image: "/insight-fastighet.jpg",
                 date: "1 januari 2024",
                 buttonText: "Läs Mer",
+                backgroundColorStart: "from-bg-gray-500",
+                backgroundColorVia: "via-gray-600",
+                backgroundColorEnd: "to-gray-800",
+
               },
               {
                 title: "Brottsstatistik",
@@ -368,6 +372,10 @@ const HomePage = () => {
                 image: "/insight-brott.jpg",
                 date: "15 december 2023",
                 buttonText: "Utforska",
+                backgroundColorStart: "from-bg-gray-500",
+                backgroundColorVia: "via-gray-600",
+                backgroundColorEnd: "to-gray-800",
+
               },
               {
                 title: "Betygsförbättringar",
@@ -376,11 +384,16 @@ const HomePage = () => {
                 image: "/insight-skolor.jpg",
                 date: "22 november 2023",
                 buttonText: "Se Detaljer",
+                      backgroundColorStart: "from-bg-gray-500",
+                backgroundColorVia: "via-gray-600",
+                backgroundColorEnd: "to-gray-800",
+
+
               },
             ].map((insight, index) => (
               <div
                 key={index}
-                className="relative bg-white shadow-lg rounded-lg overflow-hidden flex flex-col transform transition-transform hover:scale-105 hover:shadow-xl"
+                className="relative bg-white shadow-lg shadow-gray-700 rounded-lg overflow-hidden flex flex-col transform transition-transform "
               >
                 {/* Bild och Overlay */}
                 <div className="relative w-full h-48">
@@ -396,12 +409,14 @@ const HomePage = () => {
                 </div>
 
                 {/* Textinnehåll */}
-                <div className="p-6 flex flex-col justify-between flex-grow">
-                  <h3 className="text-2xl font-bold mb-2 text-gray-800">{insight.title}</h3>
-                  <p className="text-gray-600 mb-4 text-sm">{insight.description}</p>
-                  <button className="mt-auto bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform transform hover:scale-105">
+                <div className={`p-6 flex flex-col justify-between flex-grow bg-gradient-to-b ${insight.backgroundColorStart} ${insight.backgroundColorVia} ${insight.backgroundColorEnd}`}>
+                  <h3 className="text-2xl font-bold mb-2 text-white">{insight.title}</h3>
+                  <p className="text-gray-300 mb-4 text-sm">{insight.description}</p>
+                  {/* <button className="mt-auto bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform transform hover:scale-105"> */}
+                    <Link className="mt-auto bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform transform hover:scale-105 text-center" href={"/ComingSoon"}>
                     {insight.buttonText}
-                  </button>
+                    </Link>
+                  {/* </button> */}
                 </div>
               </div>
             ))}
@@ -441,67 +456,67 @@ const HomePage = () => {
         </div>
       )} */}
 
-<section
-  id="testimonials"
-  className="py-16 bg-gradient-to-b from-gray-200 via-gray-400 to-gray-900 text-white"
->
-  <div className="max-w-7xl mx-auto text-center px-6 lg:px-0">
-    <h2 className="text-4xl font-bold mb-6 text-gray-100">Vad våra kunder säger</h2>
-    <p className="text-lg mb-12 text-gray-700">
-      Våra användare älskar vad vi gör. Läs vad de har att säga om våra tjänster.
-    </p>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {[
-        {
-          name: "Anna Svensson",
-          feedback:
-            "Plattformen är enkel att använda och har gett mig en djupare förståelse för fastighetsmarknaden.",
-          role: "Fastighetsmäklare",
-          date: "10 januari 2024",
-        },
-        {
-          name: "Erik Johansson",
-          feedback:
-            "Dataanalysverktygen är fantastiska och har hjälpt mig att göra mer informerade beslut.",
-          role: "Dataanalytiker",
-          date: "5 december 2023",
-        },
-        {
-          name: "Maria Karlsson",
-          feedback:
-            "Otroligt intuitiv och användarvänlig. Jag kan varmt rekommendera den här plattformen!",
-          role: "Kommunchef",
-          date: "22 november 2023",
-        },
-      ].map((testimonial, index) => (
-        <motion.div
-          key={index}
-          className="relative bg-gradient-to-b from-gray-500 via-gray-700 to-gray-900 p-6 rounded-lg shadow-lg flex flex-col justify-between"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: index * 0.2 }}
-        >
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold text-lg">
-              {testimonial.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </div>
-            <div>
-              <p className="font-bold text-white">{testimonial.name}</p>
-              <p className="text-sm text-gray-400">{testimonial.role}</p>
-            </div>
+      <section
+        id="testimonials"
+        className="py-16 bg-gradient-to-b from-gray-500 via-gray-600  to-gray-800 text-white"
+      >
+        <div className="max-w-screen-2xl mx-auto text-center px-6 ">
+          <h2 className="text-4xl font-bold mb-6 text-gray-100">Vad våra kunder säger</h2>
+          <p className="text-lg mb-12 text-gray-200">
+            Våra användare älskar vad vi gör. Läs vad de har att säga om våra tjänster.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Anna Svensson",
+                feedback:
+                  "Plattformen är enkel att använda och har gett mig en djupare förståelse för fastighetsmarknaden.",
+                role: "Fastighetsmäklare",
+                date: "10 januari 2024",
+              },
+              {
+                name: "Erik Johansson",
+                feedback:
+                  "Dataanalysverktygen är fantastiska och har hjälpt mig att göra mer informerade beslut.",
+                role: "Dataanalytiker",
+                date: "5 december 2023",
+              },
+              {
+                name: "Maria Karlsson",
+                feedback:
+                  "Otroligt intuitiv och användarvänlig. Jag kan varmt rekommendera den här plattformen!",
+                role: "Kommunchef",
+                date: "22 november 2023",
+              },
+            ].map((testimonial, index) => (
+              <motion.div
+                key={index}
+                className="relative bg-gradient-to-b from-gray-500 via-gray-700 to-gray-900 p-6 rounded-lg shadow-lg flex flex-col justify-between"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: index * 0.2 }}
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    {testimonial.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </div>
+                  <div>
+                    <p className="font-bold text-white">{testimonial.name}</p>
+                    <p className="text-sm text-gray-400">{testimonial.role}</p>
+                  </div>
+                </div>
+                <p className="italic text-gray-200 mb-4">"{testimonial.feedback}"</p>
+                <hr className="border-gray-600 my-4" />
+                <div className="text-xs text-gray-300 text-right">{testimonial.date}</div>
+              </motion.div>
+            ))}
           </div>
-          <p className="italic text-gray-200 mb-4">"{testimonial.feedback}"</p>
-          <hr className="border-gray-600 my-4" />
-          <div className="text-xs text-gray-500 text-right">{testimonial.date}</div>
-        </motion.div>
-      ))}
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
 
 
