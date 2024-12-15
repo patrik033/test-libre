@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import DashboardNavbar from "./DashboardNavbar"; // Specifik navbar för dashboard
 import DashboardSidebar from "./DashboardSidebar"; // Dashboard-sidomeny

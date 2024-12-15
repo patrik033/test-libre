@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import Navbar from "@/components/UI/Navbar/Navbar"; // Globala navbar-komponenten
 import Footer from "@/components/UI/Footer/Footer"; // Globala footer-komponenten
