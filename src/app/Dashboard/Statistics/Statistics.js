@@ -1,4 +1,3 @@
-import DashboardLayout from "./DashboardLayout";
 const Statistics = () => {
   return (
 <div className="min-h-screen ">

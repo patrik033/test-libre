@@ -16,8 +16,14 @@ const dashboardLinks = [
     category: "Dashboard",
     links: [
       { href: "/Dashboard", label: "Översikt" },
-      { href: "/Dashboard/Statistics", label: "Statistik" },
       { href: "/Dashboard/Settings", label: "Inställningar" },
+    ],
+  },
+  {
+    category: "Statistics",
+    links: [
+      { href: "/Dashboard/Statistics", label: "Statistik" },
+      { href: "/Dashboard/Comparison", label: "Comparison" },
     ],
   },
   {
@@ -34,7 +40,7 @@ const DashboardNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedGroup, setExpandedGroup] = useState(null);
   const pathname = usePathname();
-
+console.log(pathname)
   return (
     <div className="lg:hidden mb-8">
       <nav className="bg-gray-800 text-white fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4 h-16">
@@ -61,9 +67,12 @@ const DashboardNavbar = () => {
                     }`}
                   />
                 </button>
+
+              
                 {expandedGroup === group.category && (
                   <div className="pl-4 space-y-2 mt-2">
                     {group.links.map((link) => (
+                     
                       <Link
                         key={link.href}
                         href={link.href}

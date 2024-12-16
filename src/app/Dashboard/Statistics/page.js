@@ -1,6 +1,6 @@
 "use client";
 
-import StatisticsPage from "@/components/Dashboard/Statistics";
+import StatisticsPage from "@/app/Dashboard/Statistics/Statistics";
 
 export default function Page(){
     // return <Dashboard/>

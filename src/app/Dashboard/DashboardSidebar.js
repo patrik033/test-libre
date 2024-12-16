@@ -15,8 +15,15 @@ const dashboardLinks = [
     category: "Dashboard",
     links: [
       { href: "/Dashboard", label: "Översikt", icon: <FaHome /> },
-      { href: "/Dashboard/Statistics", label: "Statistik", icon: <FaChartBar /> },
       { href: "/Dashboard/Settings", label: "Inställningar", icon: <FaCog /> },
+    ],
+  },
+  {
+    category: "Statistics",
+    links: [
+      { href: "/Dashboard/Statistics", label: "Statistik", icon: <FaChartBar /> },
+      { href: "/Dashboard/Comparison", label: "Comparison", icon: <FaChartBar /> },
+
     ],
   },
   {

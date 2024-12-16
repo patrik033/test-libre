@@ -8,16 +8,6 @@ import { kommuner } from "@/app/Dashboard/Kommuner";
 
 
 
-const handleKommunChange = (event) => {
-  const selected = kommuner.find((k) => k.Kommunnamn === event.target.value);
-  console.log(selected)
-  setSelectedKommun(selected);
-};
-
-const components = {
-  Statistik: () => import("./Statistics"),
-  Inställningar: () => import("./Settings"),
-};
 
 export default function DashboardLayout() {
   const [selectedKommun, setSelectedKommun] = useState(null);
@@ -33,28 +23,19 @@ export default function DashboardLayout() {
     setSelectedKommun(selected);
   };
 
-  // const handleMenuClick = async (key) => {
-  //   if (key !== activeKey) {
-  //     if (key === "Home") {
-  //       setComponent(() => Dashboard);
-  //     } else if (components[key]) {
-  //       const { default: LoadedComponent } = await components[key]();
-  //       setComponent(() => LoadedComponent);
-  //     }
-  //     setActiveKey(key);
-  //   }
-  // };
+
 
   const menuItems = [
     { key: "Home", label: "Home" },
     { key: "Statistik", label: "Statistik" },
     { key: "Inställningar", label: "Inställningar" },
+    { key: "Comparison", label: "Comparison" },
   ];
 
   kommuner.sort((a, b) => a.Kommunnamn.localeCompare(b.Kommunnamn));
 
   return (
-    <div className="dashboard-content p-8">
+    <div className="dashboard-content p-8 md: mt-8">
       <h2>{menuItems.find((item) => item.key === activeKey)?.label || "Dashboard"}</h2>
 
       {/* Dropdown för att välja kommun */}

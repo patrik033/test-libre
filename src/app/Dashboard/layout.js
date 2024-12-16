@@ -17,10 +17,10 @@ export default function Layout({ children }) {
 
         {/* Huvudinnehåll */}
         <main
-          className="flex-1 p-4  overflow-y-auto"
+          className="flex-1   overflow-y-auto "
           style={{
-            marginTop: "64px", // Kompensera för navbarens höjd
-            paddingBottom: "80px", // Kompensera för footerns höjd
+            //marginTop: "64px", // Kompensera för navbarens höjd
+            //paddingBottom: "80px", // Kompensera för footerns höjd
           }}
         >
           {children}

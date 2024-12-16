@@ -357,7 +357,7 @@ const HomePage = () => {
                 title: "Fastighetspriser 2023",
                 description:
                   "Fastighetspriserna ökade med 5% i genomsnitt under 2023. Kommun X såg en ökning på 12%, medan Kommun Y hade en minskning på 3%.",
-                image: "/insight-fastighet.jpg",
+                image: "/huspriser.jpg",
                 date: "1 januari 2024",
                 buttonText: "Läs Mer",
                 backgroundColorStart: "from-bg-gray-500",
@@ -369,7 +369,7 @@ const HomePage = () => {
                 title: "Brottsstatistik",
                 description:
                   "Brottsnivåerna minskade med 10% i genomsnitt under året, särskilt i Kommun Z som rapporterade 15% färre incidenter.",
-                image: "/insight-brott.jpg",
+                image: "/brott.jpg",
                 date: "15 december 2023",
                 buttonText: "Utforska",
                 backgroundColorStart: "from-bg-gray-500",
@@ -381,7 +381,7 @@ const HomePage = () => {
                 title: "Betygsförbättringar",
                 description:
                   "Nationella provresultat förbättrades med 4% i matematik för årskurs 9. Kommunerna i norra Sverige hade högst förbättringar.",
-                image: "/insight-skolor.jpg",
+                image: "/skola.jpg",
                 date: "22 november 2023",
                 buttonText: "Se Detaljer",
                       backgroundColorStart: "from-bg-gray-500",

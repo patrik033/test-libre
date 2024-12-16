@@ -1,4 +1,4 @@
-import DashboardLayout from "./DashboardLayout";
+
 
 const Settings = () => {
   return (
