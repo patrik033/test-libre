@@ -56,6 +56,7 @@ const ComparisonPage = () => {
         body: JSON.stringify(requestBody),
       });
       const data = await response.json();
+      console.log("API Response:", data); // Lägg till denna logg
       setComparisonResults(data);
       setLoadedParameters([...selectedParameters]);
       setShowResults(true);
@@ -73,6 +74,8 @@ const ComparisonPage = () => {
     setLoadedParameters([]);
     setShowResults(false);
   };
+
+  kommuner.sort((a, b) => a.Kommunnamn.localeCompare(b.Kommunnamn));
 
   return (
     <div className="comparison-dashboard px-4 md:px-8 bg-gray-100 text-gray-800 text-white min-h-screen p-8">
@@ -183,34 +186,61 @@ const ComparisonPage = () => {
                 <div className="mt-4 text-gray-700">
                   <h3 className="text-lg font-semibold mb-2 text-center">Procentuell skillnad</h3>
                   <ul className="text-sm space-y-1">
-                    {resultsForParameter.map((result, index) => (
-                      <li
-                        key={index}
-                        className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm md:text-base"
-                      >
-                        <FaPercentage className="text-green-500" />
-                        <span>
-                          <strong>{getMunicipalityName(selectedMunicipality1)}</strong> hade{" "}
-                          <strong
-                            className={
-                              result.percentageDifference > 0 ? "text-green-500" : "text-red-500"
-                            }
-                          >
-                            {result.percentageDifference > 0 ? "högre" : "lägre"}
-                          </strong>{" "}
-                          värde med{" "}
-                        </span>
-                        <span className="font-bold">{result.percentageDifference.toFixed(2)}%</span>
-                        <span>
-                          än <strong>{getMunicipalityName(selectedMunicipality2)}</strong> för{" "}
-                          <strong>{result.fieldName}</strong>.
-                        </span>
-                      </li>
-                    ))}
+                    {resultsForParameter.map((result, index) => {
+                      const { percentageDifference, value1, value2, fieldName } = result;
+
+                      let comparisonText;
+                      if (percentageDifference === 0) {
+                        comparisonText = (
+                          <span>
+                            <strong>{getMunicipalityName(selectedMunicipality1)}</strong> hade samma värde som{" "}
+                            <strong>{getMunicipalityName(selectedMunicipality2)}</strong> för{" "}
+                            <strong>{fieldName}</strong>.
+                          </span>
+                        );
+                      } else if (Math.abs(percentageDifference) >= 100) {
+                        const times = (value1 / value2).toFixed(2); // Beräkna hur många gånger större/mindre
+                        comparisonText = (
+                          <span>
+                            <strong>{getMunicipalityName(selectedMunicipality1)}</strong>{" "}
+                            var <strong>{times} gånger</strong>{" "}
+                            {percentageDifference > 0 ? "större" : "mindre"} än{" "}
+                            <strong>{getMunicipalityName(selectedMunicipality2)}</strong> för{" "}
+                            <strong>{fieldName}</strong>.
+                          </span>
+                        );
+                      } else {
+                        comparisonText = (
+                          <span>
+                            <strong>{getMunicipalityName(selectedMunicipality1)}</strong> hade{" "}
+                            <strong
+                              className={
+                                percentageDifference > 0 ? "text-green-500" : "text-red-500"
+                              }
+                            >
+                              {percentageDifference > 0 ? "högre" : "lägre"}
+                            </strong>{" "}
+                            värde med <span className="font-bold">{percentageDifference.toFixed(2)}%</span> än{" "}
+                            <strong>{getMunicipalityName(selectedMunicipality2)}</strong> för{" "}
+                            <strong>{fieldName}</strong>.
+                          </span>
+                        );
+                      }
+
+                      return (
+                        <li
+                          key={index}
+                          className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm md:text-base"
+                        >
+                          <FaPercentage className="text-green-500" />
+                          {comparisonText}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
-
               </div>
+
             );
           })}
         </div>

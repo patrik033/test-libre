@@ -20,7 +20,7 @@ const SkeletonDashboard = () => {
 
       {/* Diagram-sektionen */}
       <div className="charts-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from({ length: 7 }).map((_, index) => (
+        {Array.from({ length: 6 }).map((_, index) => (
           <div
             key={index}
             className="chart bg-gray-300 p-4 rounded shadow h-64"

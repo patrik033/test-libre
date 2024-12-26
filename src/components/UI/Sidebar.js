@@ -22,6 +22,9 @@ const Sidebar = ({
   const [isNoiseFilterOpen, setIsNoiseFilterOpen] = useState(true);
   const [isPropertyFilterOpen, setIsPropertyFilterOpen] = useState(false);
 
+
+
+
   return (
     <aside className="bg-gray-800 text-white p-4 space-y-4">
       <h2 className="text-xl font-semibold">Filteralternativ</h2>
@@ -43,7 +46,7 @@ const Sidebar = ({
             checked={isPropertyDataChecked}
             onChange={(e) => {
               setIsPropertyDataChecked(e.target.checked);
-              if (e.target.checked) loadSelectedDataType("Fastighetsdata");
+              // if (e.target.checked) loadSelectedDataType("Fastighetsdata");
             }}
           />
           <span className="ml-2">Fastighetsdata</span>

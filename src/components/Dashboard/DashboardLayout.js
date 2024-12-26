@@ -66,8 +66,8 @@ export default function DashboardLayout() {
 
 
         <div>
+          <p className="text-gray-500 my-4">Välj en kommun för att visa Dashboard.</p>
           <SkeletonDashboard />
-          <p className="text-gray-500">Välj en kommun för att visa Dashboard.</p>
         </div>
       ) : (
         <div style={{ background: "#fff", minHeight: "360px" }}>

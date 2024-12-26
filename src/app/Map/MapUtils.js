@@ -1,4 +1,5 @@
 export const getFeatureBounds = (geometry) => {
+
   let coordinates = [];
 
   if (geometry.type === 'Polygon') {

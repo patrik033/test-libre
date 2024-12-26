@@ -9,6 +9,8 @@ export const loadCountyBoundaries = async (map, countyBoundariesData) => {
     );
     const data = await response.json();
 
+   
+
     // Om Gotland saknas, lägg till Gotlands-data separat
     if (!data.features.some(feature => feature.properties.name === "Gotlands län")) {
       const responseGotland = await fetch('/gotland.json');

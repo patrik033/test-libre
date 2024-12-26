@@ -3,7 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete'
 import '@geoapify/geocoder-autocomplete/styles/minimal.css'
-import Footer from '@/components/UI/Footer/Footer';
+
 
 import Sidebar from '../../components/UI/Sidebar';
 import { getFeatureBounds } from './MapUtils';
@@ -12,6 +12,7 @@ import { addCountyPopupEvents } from '@/components/Layers/AddCountyBoundaryHover
 import { loadMunicipalities } from '@/components/Layers/LoadMunicipalitiesLayer';
 import { loadNoisePollutionData } from '@/components/Layers/LoadNoisePollutionLayer';
 import { updateFilters } from '@/components/Layers/CreateNoisePollutionLayerControls';
+import FullscreenOverlay from './FullscreenOverlay';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 const SWEDEN_BOUNDS = [[10.371094, 55.603178], [24.038086, 69.162558]];
@@ -23,6 +24,7 @@ const MarketTrendsMap = () => {
   const countyBoundariesData = useRef(null);
   const municipalityBoundariesData = useRef(null);
   const noiseDataCache = useRef(null);
+
 
   const [isCountryView, setIsCountryView] = useState(true);
   const [isCountyView, setIsCountyView] = useState(false);
@@ -40,6 +42,10 @@ const MarketTrendsMap = () => {
   const [showIndustry, setShowIndustry] = useState(true);
   const [showSchools, setShowSchools] = useState(true);
 
+  const [currentMunicipalityRef, setCurrentMunicipalityRef] = useState(null);
+  const [realEstateData, setRealEstateData] = useState([]);
+  const [selectedProperty, setSelectedProperty] = useState(null);
+  const [selectedPoint, setSelectedPoint] = useState(null); // State för modaldata
 
   // Filter för bullerdata
   const [roadFilter, setRoadFilter] = useState({
@@ -52,6 +58,130 @@ const MarketTrendsMap = () => {
   });
 
 
+  const addPropertyMarkers = (map, properties) => {
+    const geojson = {
+        type: 'FeatureCollection',
+        features: properties.map((property) => ({
+            type: 'Feature',
+            geometry: {
+                type: 'Point',
+                coordinates: [property.longitude, property.latitude],
+            },
+            properties: {
+                id: property.id,
+                street: property.street, // Lägg till street i properties
+            },
+        })),
+    };
+
+    const svgIcon = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512" fill="#007cbf">
+          <rect x="16" y="24" width="32" height="32" fill="#6ba4ff" stroke="#004d99" stroke-width="2"></rect>
+          <polygon points="8,24 32,8 56,24" fill="#007cbf" stroke="#004d99" stroke-width="2"></polygon>
+          <rect x="24" y="40" width="8" height="16" fill="#004d99"></rect>
+          <rect x="36" y="32" width="6" height="6" fill="#ffffff"></rect>
+          <rect x="22" y="32" width="6" height="6" fill="#ffffff"></rect>
+        </svg>
+    `;
+    const svgDataUrl = `data:image/svg+xml;base64,${btoa(svgIcon)}`;
+
+    if (!map.hasImage('property-icon')) {
+        const image = new Image(40, 40);
+        image.onload = () => {
+            map.addImage('property-icon', image);
+        };
+        image.src = svgDataUrl;
+    }
+
+    if (!map.getSource('property-data')) {
+        map.addSource('property-data', { type: 'geojson', data: geojson });
+
+        map.addLayer({
+            id: 'property-markers',
+            type: 'symbol',
+            source: 'property-data',
+            layout: {
+                'icon-image': 'property-icon',
+                'icon-size': 1,
+                'icon-allow-overlap': true,
+            },
+        });
+
+        const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+        });
+
+        // Visa popup med adress vid hover
+        map.on('mouseenter', 'property-markers', (e) => {
+            const street = e.features[0].properties.street || 'Okänd adress';
+
+            popup
+                .setLngLat(e.features[0].geometry.coordinates)
+                .setHTML(`<div><strong>Adress:</strong> ${street}</div>`)
+                .addTo(map);
+
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        map.on('mouseleave', 'property-markers', () => {
+            popup.remove();
+            map.getCanvas().style.cursor = '';
+        });
+
+        // Klick för att välja fastighet
+        map.on('click', 'property-markers', (e) => {
+            const propertyId = e.features[0].properties.id;
+            setSelectedProperty(propertyId);
+        });
+    } else {
+        map.getSource('property-data').setData(geojson);
+    }
+};
+
+
+
+
+
+
+
+  useEffect(() => {
+    if (!currentMunicipalityRef) return;
+
+
+    const fetchRealEstateData = async () => {
+      try {
+
+        const response = await fetch(`https://localhost:7150/api/kommuner/realestate/${currentMunicipalityRef}`);
+        const data = await response.json();
+        setRealEstateData(data);
+      } catch (error) {
+        console.error('Error fetching real estate data:', error);
+      }
+    };
+
+    fetchRealEstateData();
+  }, [currentMunicipalityRef]);
+
+  // Lägg till fastighetspunkter när fastighetsdata är laddad
+  useEffect(() => {
+    if (
+      mapRef.current &&
+      mapRef.current.isStyleLoaded() &&
+      isPropertyDataChecked &&
+      realEstateData.length > 0
+    ) {
+      addPropertyMarkers(mapRef.current, realEstateData);
+    } else if (
+      mapRef.current &&
+      mapRef.current.isStyleLoaded() &&
+      !isPropertyDataChecked &&
+      mapRef.current?.getSource('property-data')
+    ) {
+      mapRef.current.removeLayer('property-markers');
+      mapRef.current.removeSource('property-data');
+    }
+  }, [realEstateData, isPropertyDataChecked]);
 
 
   const toggleRoadFilter = (type) => {
@@ -60,6 +190,11 @@ const MarketTrendsMap = () => {
       [type]: !prev[type],
     }));
   };
+
+  const onMunicipalityRefUpdate = (currentMunicipality) => {
+    setCurrentMunicipalityRef(null)
+    setCurrentMunicipalityRef(currentMunicipality)
+  }
 
 
 
@@ -105,6 +240,7 @@ const MarketTrendsMap = () => {
         map.setLayoutProperty('county-boundaries', 'visibility', 'none');
         map.setLayoutProperty('county-boundaries-outline', 'visibility', 'none');
 
+
         await loadMunicipalities(
           map,
           countyId,
@@ -112,7 +248,9 @@ const MarketTrendsMap = () => {
           setCurrentMunicipalityId,
           setMarkedMunicipalityName,
           setIsMunicipalityView,
-          isNoiseFilterChecked
+          isNoiseFilterChecked,
+          isPropertyDataChecked,
+          onMunicipalityRefUpdate
         );
       });
     });
@@ -123,7 +261,7 @@ const MarketTrendsMap = () => {
 
   useEffect(() => {
     const map = mapRef.current;
-  
+
     if (isNoiseFilterChecked && markedMunicipalityName === "Eskilstuna kommun") {
       // Ladda bullerdatan om filtret är aktiverat och Eskilstuna kommun är vald
       loadNoisePollutionData(
@@ -136,7 +274,12 @@ const MarketTrendsMap = () => {
         showSchools,
         noiseDataCache
       );
-    } else {
+
+    }
+
+
+
+    else {
       // Om bullerfiltret är avaktiverat, ta bort bullerdatalagren och källan
       if (map.getSource('noise-data')) {
         if (map.getLayer('road-layer')) map.removeLayer('road-layer');
@@ -147,7 +290,7 @@ const MarketTrendsMap = () => {
       }
     }
   }, [isNoiseFilterChecked, currentMunicipalityId, markedMunicipalityName, roadFilter, showRailway, showIndustry, showSchools]);
-  
+
 
 
 
@@ -201,16 +344,23 @@ const MarketTrendsMap = () => {
         map.removeLayer('school-layer');
         map.removeSource('noise-data');
       }
+
+      if (map.getSource('property-data')) {
+        map.removeLayer('property-markers');
+        map.removeSource('property-data');
+      }
     }
   };
 
   const loadSelectedDataType = async (dataType) => {
     const map = mapRef.current;
     if (dataType === "BullerFilter" && isNoiseFilterChecked) {
+      console.log(dataType)
       // Ladda bullerdata om checkbox är markerad
       await loadNoisePollutionData(map, currentMunicipalityId);
     } else if (dataType === "Fastighetsdata" && isPropertyDataChecked) {
-      console.log("Laddar fastighetsdata...");
+      console.log(dataType)
+
     }
   };
 
@@ -221,13 +371,13 @@ const MarketTrendsMap = () => {
       setIsCountryView(true);
       setIsCountyView(false);
       setIsMunicipalityView(false);
-  
+
       // Zooma tillbaka till Sverigekartan
       map.fitBounds(SWEDEN_BOUNDS, {
         padding: 20,
         center: [17.5671981, 62.1983366]
       });
-  
+
       // Kontrollera och skapa om 'county-boundaries' och 'county-boundaries-outline' om de saknas
       if (!map.getSource('county-boundaries')) {
         // Ladda in din 'county-boundaries' data här
@@ -235,7 +385,7 @@ const MarketTrendsMap = () => {
           type: 'geojson',
           data: countyBoundariesData.current, // Förutsätter att du har lagrat datan i countyBoundariesData
         });
-  
+
         map.addLayer({
           id: 'county-boundaries',
           type: 'fill',
@@ -245,7 +395,7 @@ const MarketTrendsMap = () => {
             'fill-opacity': 0.4,
           }
         });
-  
+
         map.addLayer({
           id: 'county-boundaries-outline',
           type: 'line',
@@ -260,19 +410,19 @@ const MarketTrendsMap = () => {
         map.setLayoutProperty('county-boundaries', 'visibility', 'visible');
         map.setLayoutProperty('county-boundaries-outline', 'visibility', 'visible');
       }
-  
+
       // Ta bort valda kommun- eller buller-lager om de finns
       if (map.getSource('selected-municipality')) {
         map.removeLayer('selected-municipality-boundary');
         map.removeSource('selected-municipality');
       }
-  
+
       if (map.getSource('municipalities')) {
         map.removeLayer('municipality-boundaries');
         map.removeLayer('municipality-boundaries-outline');
         map.removeSource('municipalities');
       }
-  
+
       if (map.getSource('noise-data')) {
         map.removeLayer('road-layer');
         map.removeLayer('railway-layer');
@@ -280,9 +430,14 @@ const MarketTrendsMap = () => {
         map.removeLayer('school-layer');
         map.removeSource('noise-data');
       }
+
+      if (map.getSource('property-data')) {
+        map.removeLayer('property-markers');
+        map.removeSource('property-data');
+      }
     }
   };
-  
+
 
 
   function onPlaceSelect(value) {
@@ -297,11 +452,11 @@ const MarketTrendsMap = () => {
         const map = mapRef.current;
 
 
-        if(map.getSource('county-boundaries')){
+        if (map.getSource('county-boundaries')) {
           console.log("FOUND IT!!!")
           //map.removeLayer('county-boundaries');
           //map.removeLayer('county-boundaries-outline');
-         // map.removeSource('county-boundaries');
+          // map.removeSource('county-boundaries');
 
         }
 
@@ -310,13 +465,13 @@ const MarketTrendsMap = () => {
           map.removeLayer('selected-municipality-boundary');
           map.removeSource('selected-municipality');
         }
-  
+
         if (map.getSource('municipalities')) {
           map.removeLayer('municipality-boundaries');
           map.removeLayer('municipality-boundaries-outline');
           map.removeSource('municipalities');
         }
-  
+
         if (map.getSource('noise-data')) {
           map.removeLayer('road-layer');
           map.removeLayer('railway-layer');
@@ -334,16 +489,7 @@ const MarketTrendsMap = () => {
         });
       }
 
-      // Ta bort tidigare markör om den finns
-      // if (markerRef.current) {
-      //   markerRef.current.remove();
-      // }
 
-      // Lägg till en ny markör på kartan
-      // markerRef.current = new mapboxgl.Marker()
-      //   .setLngLat([lon, lat])
-      //   .setPopup(new mapboxgl.Popup().setText(formatted)) // Popup med adressinformation
-      //   .addTo(mapRef.current);
     }
   }
 
@@ -363,26 +509,12 @@ const MarketTrendsMap = () => {
   }
 
 
+
+
+
+
   return (
     <div className="flex flex-col md:flex-row h-screen">
-      {/* <div className="absolute top-4 left-4 z-10 bg-white p-2 rounded shadow-md w-80">
-        <GeoapifyContext apiKey="217e62842c104e729482561d013f7494">
-          <div className="absolute top-4 left-4 z-10 w-80">
-             <GeoapifyGeocoderAutocomplete
-             placeholder='Skriv in adress här'
-              placeSelect={onPlaceSelect}
-              suggestionsChange={onSuggectionChange}
-              onUserInput={onUserInput}
-              onOpen={onOpen}
-              onClose={onClose}
-              allowNonVerifiedHouseNumber={true}
-            />
-          </div>
-        </GeoapifyContext>
-
-      </div> */}
-
-
       <Sidebar
         className="w-full md:w-64 bg-gray-800 text-white p-4"
         isNoiseFilterChecked={isNoiseFilterChecked}
@@ -404,14 +536,29 @@ const MarketTrendsMap = () => {
       />
 
       <div className="flex-grow relative">
-        <div className="absolute top-0 right-0 p-4 bg-black bg-opacity-75 text-white">
-          <h2 className="text-lg font-bold">{markedMunicipalityName || "Välj en kommun"}</h2>
+        {/* Kommunnamn */}
+        <div className="absolute top-0 right-0 p-4 bg-black bg-opacity-75 text-white rounded-lg shadow-lg">
+          <h2 className="text-lg font-bold">
+            {markedMunicipalityName || "Välj en kommun"}
+          </h2>
         </div>
+
+        {/* Karta */}
         <div ref={mapContainerRef} className="w-full h-full" />
+
+        {/* Fastighetsmodal */}
+        {selectedProperty && (
+          <FullscreenOverlay
+            propertiesToSend={selectedProperty}
+            onClose={() => setSelectedProperty(null)}
+          />
+        )}
+
+        {/* Återgå-knapp */}
         {isMunicipalityView && (
           <button
             onClick={goBackToCountyView}
-            className="absolute top-20 left-10 p-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
+            className="absolute top-20 left-10 p-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 shadow-md"
           >
             Återgå till länsnivå
           </button>

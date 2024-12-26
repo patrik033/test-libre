@@ -10,7 +10,7 @@ import { getFeatureBounds } from '../../app/Map/MapUtils';
  * @param {function} setMarkedMunicipalityName - State setter for the current municipality name.
  * @param {function} setIsMunicipalityView - State setter for municipality view.
  * @param {boolean} isNoiseFilterChecked - Flag for checking if noise data filter is active.
- * 
+ * @param {boolean} isPropertyDataChecked - Flag for checking if property data filter is active
  * 
  * 
  * 
@@ -18,28 +18,47 @@ import { getFeatureBounds } from '../../app/Map/MapUtils';
  */
 
 
-const showSelectedMunicipalityBoundary = (map, municipalityFeature) => {
-    const municipalityBoundary = {
-      type: 'FeatureCollection',
-      features: [municipalityFeature],
-    };
+const showSelectedMunicipalityBoundary = (map, municipalityFeature,bubbledRefs, onMunicipalityRefUpdate) => {
+
+
+  const municipalityRef = municipalityFeature.properties.ref;
+
   
-    if (!map.getSource('selected-municipality')) {
-      map.addSource('selected-municipality', { type: 'geojson', data: municipalityBoundary });
-  
-      map.addLayer({
-        id: 'selected-municipality-boundary',
-        type: 'line',
-        source: 'selected-municipality',
-        paint: {
-          'line-color': '#FF0000',
-          'line-width': 2,
-        },
-      });
-    } else {
-      map.getSource('selected-municipality').setData(municipalityBoundary);
-    }
+
+
+  const municipalityBoundary = {
+    type: 'FeatureCollection',
+    features: [municipalityFeature],
   };
+
+  if (!map.getSource('selected-municipality')) {
+    map.addSource('selected-municipality', { type: 'geojson', data: municipalityBoundary });
+
+    map.addLayer({
+      id: 'selected-municipality-boundary',
+      type: 'line',
+      source: 'selected-municipality',
+      paint: {
+        'line-color': '#FF0000',
+        'line-width': 2,
+      },
+    });
+  } else {
+    map.getSource('selected-municipality').setData(municipalityBoundary);
+  }
+
+  if (!bubbledRefs.has(municipalityRef)) {
+    // Lägg till ref i set
+    bubbledRefs.add(municipalityRef);
+
+    // Anropa callback för att bubbla upp ref
+    if (onMunicipalityRefUpdate) {
+      onMunicipalityRefUpdate(municipalityRef);
+    }
+  }
+};
+
+
 
 
 export const loadMunicipalities = async (
@@ -49,9 +68,14 @@ export const loadMunicipalities = async (
   setCurrentMunicipalityId,
   setMarkedMunicipalityName,
   setIsMunicipalityView,
-  isNoiseFilterChecked
+  isNoiseFilterChecked,
+  isPropertyDataChecked,
+  onMunicipalityRefUpdate 
 ) => {
+
+  
   const GEOAPIFY_API_KEY = process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY;
+
 
   try {
     let data;
@@ -66,6 +90,8 @@ export const loadMunicipalities = async (
     }
 
     municipalityBoundariesData.current = data;
+
+
 
     map.setLayoutProperty('county-boundaries', 'visibility', 'none');
     map.setLayoutProperty('county-boundaries-outline', 'visibility', 'none');
@@ -99,7 +125,7 @@ export const loadMunicipalities = async (
       });
 
       const popup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false });
-
+      const bubbledRefs = new Set(); // Set för att undvika dubbletter
       // Hover for municipalities
       map.on('mousemove', 'municipality-boundaries', (e) => {
         const features = map.queryRenderedFeatures(e.point, { layers: ['municipality-boundaries'] });
@@ -119,11 +145,20 @@ export const loadMunicipalities = async (
       map.on('click', 'municipality-boundaries', (e) => {
         const municipalityId = e.features[0].properties.place_id;
         const municipalityName = e.features[0].properties.name;
+        const municipalityRef = e.features[0].properties.ref;
+
+
+        if (onMunicipalityRefUpdate) {
+          onMunicipalityRefUpdate(municipalityRef);
+        }
 
         setCurrentMunicipalityId(municipalityId);
         setMarkedMunicipalityName(municipalityName);
         setIsMunicipalityView(true);
 
+
+
+       
         if (isNoiseFilterChecked && municipalityName === "Eskilstuna kommun") {
           map.setLayoutProperty('county-boundaries', 'visibility', 'none');
           map.setLayoutProperty('municipality-boundaries', 'visibility', 'none');
@@ -135,7 +170,7 @@ export const loadMunicipalities = async (
           map.setLayoutProperty('municipality-boundaries-outline', 'visibility', 'none');
         }
 
-        showSelectedMunicipalityBoundary(map, e.features[0]);
+        showSelectedMunicipalityBoundary(map, e.features[0], bubbledRefs, onMunicipalityRefUpdate);
 
         // Zoom to the selected municipality
         const municipalityBounds = getFeatureBounds(e.features[0].geometry);

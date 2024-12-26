@@ -53,6 +53,7 @@ const createNoisePollutionGeoJSON = (data) => {
 
             // Om det är en primary-väg, behandla den likadant oavsett "ref"-tagg
             switch (element.tags.highway) {
+                
                 case 'motorway': noiseLevel = 10; break;
                 case 'trunk': noiseLevel = 8; break;
                 case 'primary': noiseLevel = 6; break;  // Alla primary behandlas likadant
