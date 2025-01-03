@@ -5,9 +5,9 @@ import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-g
 import '@geoapify/geocoder-autocomplete/styles/minimal.css'
 
 
-import Sidebar from '../../components/UI/Sidebar';
+import Sidebar from '../UI/Sidebar';
 import { getFeatureBounds } from './MapUtils';
-import { loadCountyBoundaries, addCountyEventListeners } from '../../components/Layers/LoadCountryBoundariesLayer';
+import { loadCountyBoundaries, addCountyEventListeners } from '../Layers/LoadCountryBoundariesLayer';
 import { addCountyPopupEvents } from '@/components/Layers/AddCountyBoundaryHoverPopup';
 import { loadMunicipalities } from '@/components/Layers/LoadMunicipalitiesLayer';
 import { loadNoisePollutionData } from '@/components/Layers/LoadNoisePollutionLayer';

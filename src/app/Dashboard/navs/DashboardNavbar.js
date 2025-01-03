@@ -24,6 +24,11 @@ const dashboardLinks = [
     links: [
       { href: "/Dashboard/Statistics", label: "Statistik" },
       { href: "/Dashboard/Comparison", label: "Comparison" },
+      { href: "/Dashboard/Trend", label: "Trender" },
+      { href: "/Dashboard/Ranking", label: "Ranking" },
+
+      
+
     ],
   },
   {

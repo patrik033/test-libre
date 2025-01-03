@@ -14,7 +14,9 @@ import {
   Legend,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend
+);
 
 const TrendDashboard = ({ kommunId, years }) => {
   const [trendData, setTrendData] = useState([]);
@@ -22,56 +24,66 @@ const TrendDashboard = ({ kommunId, years }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Oforändrad logik för att räkna procent
   const calculatePercentageChange = (newVal, oldVal) => {
-    if (oldVal === 0 || isNaN(oldVal)) return null; // Undvik division med 0
+    if (oldVal === 0 || isNaN(oldVal)) return null;
     return ((newVal - oldVal) / oldVal) * 100;
   };
 
-  const formatValue = (value) => (typeof value === "number" && !isNaN(value) ? value.toFixed(2) : "Ingen data");
+  // Ny hjälp-funktion för att ge rätt text
+  const interpretChange = (changeValue, subject) => {
+    if (changeValue === null || isNaN(changeValue)) {
+      return `${subject} saknar data för det här intervallet`;
+    }
+    if (changeValue === 0) {
+      return `${subject} är oförändrad`;
+    }
+    const sign = changeValue > 0 ? "+" : "";
+    return `${subject} ändrades med ${sign}${changeValue.toFixed(2)}%`;
+  };
 
+  // Oförändrad: fyll tomma år
   const fillMissingYears = (data, years) => {
-    const filledData = years.map((year) => {
+    // Sortera years i stigande ordning
+    const sortedYears = [...years].sort((a, b) => a - b);
+
+    return sortedYears.map((year) => {
       const existingYearData = data.find((item) => item.year === year);
       return (
         existingYearData || {
-          year: year,
+          year,
           lifeTime: null,
           averageAge: null,
           totalSales: null,
           avgSalesValue: null,
-          salesCount: null,
-          crimes: {},
-          schoolResultsYearNine: null,
-          schoolResultsYearSix: null,
+          // ...
         }
       );
     });
-    return filledData;
   };
 
+  // Uppdaterad: loopar i stigande ordning
   const generateInsights = (data) => {
     const insights = [];
     const focusCrimes = ["Rån", "Mord/dråp", "Mord/dråp, försök"];
 
-    for (let i = 1; i < data.length; i++) {
-      const prev = data[i - 1];
+    for (let i = 0; i < data.length - 1; i++) {
       const current = data[i];
+      const next = data[i + 1];
+      if (!current || !next) continue;
 
-      if (!prev || !current) continue; // Hoppa över om data saknas
-
-      // Crime insights
       const crimeChanges = focusCrimes.map((crime) => {
-        const prevValue = prev.crimes[crime] || 0;
         const currValue = current.crimes[crime] || 0;
+        const nextValue = next.crimes[crime] || 0;
         return {
           type: crime,
-          change: calculatePercentageChange(currValue, prevValue),
+          change: calculatePercentageChange(nextValue, currValue),
         };
       });
 
       const totalCrimesChange = calculatePercentageChange(
-        Object.values(current.crimes).reduce((sum, val) => sum + (val || 0), 0),
-        Object.values(prev.crimes).reduce((sum, val) => sum + (val || 0), 0)
+        Object.values(next.crimes).reduce((sum, val) => sum + (val || 0), 0),
+        Object.values(current.crimes).reduce((sum, val) => sum + (val || 0), 0)
       );
 
       const relevantCrimeInsight =
@@ -80,32 +92,27 @@ const TrendDashboard = ({ kommunId, years }) => {
           : [{ type: "Alla brott", change: totalCrimesChange }];
 
       insights.push({
-        yearRange: `${prev.year} - ${current.year}`,
-        lifeTime: calculatePercentageChange(current.lifeTime, prev.lifeTime),
-        averageAge: calculatePercentageChange(current.averageAge, prev.averageAge),
-        totalSales: calculatePercentageChange(current.totalSales, prev.totalSales),
-        avgSalesValue: calculatePercentageChange(current.avgSalesValue, prev.avgSalesValue),
-        schoolResultsYearNine: calculatePercentageChange(
-          current.schoolResultsYearNine,
-          prev.schoolResultsYearNine
-        ),
-        schoolResultsYearSix: calculatePercentageChange(
-          current.schoolResultsYearSix,
-          prev.schoolResultsYearSix
-        ),
+        yearRange: `${current.year} - ${next.year}`,
+        lifeTime: calculatePercentageChange(next.lifeTime, current.lifeTime),
+        averageAge: calculatePercentageChange(next.averageAge, current.averageAge),
+        totalSales: calculatePercentageChange(next.totalSales, current.totalSales),
+        avgSalesValue: calculatePercentageChange(next.avgSalesValue, current.avgSalesValue),
+        schoolResultsYearNine: calculatePercentageChange(next.schoolResultsYearNine, current.schoolResultsYearNine),
+        schoolResultsYearSix: calculatePercentageChange(next.schoolResultsYearSix, current.schoolResultsYearSix),
         crimeInsights: relevantCrimeInsight,
       });
     }
     return insights;
   };
 
+  // Oförändrat: hämta data
   useEffect(() => {
     const fetchTrendData = async () => {
       try {
         setLoading(true);
         setError(null);
         const requestBody = { kommunId, year: years };
-        const response = await fetch(`https://localhost:7150/api/trends/compare`, {
+        const response = await fetch("https://localhost:7150/api/trends/compare", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(requestBody),
@@ -113,8 +120,10 @@ const TrendDashboard = ({ kommunId, years }) => {
         if (!response.ok) throw new Error("Kunde inte hämta trenddata.");
 
         const rawData = await response.json();
-        const sortedData = rawData.sort((a, b) => a.year - b.year); // Sortera i stigande ordning
-        const filledData = fillMissingYears(sortedData, years); // Fyll tomma år
+        console.log(rawData)
+        const sortedData = rawData.sort((a, b) => a.year - b.year); // stigande ordning
+        const filledData = fillMissingYears(sortedData, years);
+
         setTrendData(filledData);
         setTrendInsights(generateInsights(filledData));
       } catch (err) {
@@ -123,7 +132,6 @@ const TrendDashboard = ({ kommunId, years }) => {
         setLoading(false);
       }
     };
-
     fetchTrendData();
   }, [kommunId, years]);
 
@@ -131,6 +139,7 @@ const TrendDashboard = ({ kommunId, years }) => {
   if (error) return <div>Fel: {error}</div>;
   if (!trendData || trendData.length === 0) return <div>Ingen trenddata tillgänglig.</div>;
 
+  // Oförändrad: chart-data
   const yearsLabels = trendData.map((item) => item.year);
 
   const lifeExpectancyData = {
@@ -163,7 +172,7 @@ const TrendDashboard = ({ kommunId, years }) => {
     labels: yearsLabels,
     datasets: [
       {
-        label: "Totala Försäljningar",
+        label: "Totala försäljningar",
         data: trendData.map((item) => item.totalSales),
         backgroundColor: "#4BC0C0",
       },
@@ -175,11 +184,18 @@ const TrendDashboard = ({ kommunId, years }) => {
     ],
   };
 
+  const filterDataWithCrimes = (data) => {
+    return data.filter((yearData) => {
+      return yearData.crimes && Object.keys(yearData.crimes).length > 0;
+    });
+  };
+  const crimeFilteredData = filterDataWithCrimes(trendData);
+
   const crimeData = {
-    labels: yearsLabels,
-    datasets: Object.keys(trendData[0]?.crimes || {}).map((crimeType, index) => ({
+    labels: crimeFilteredData.map((item) => item.year), // Endast år med brottsdata
+    datasets: Object.keys(crimeFilteredData[0]?.crimes || {}).map((crimeType, index) => ({
       label: crimeType,
-      data: trendData.map((item) => item.crimes[crimeType] || 0),
+      data: crimeFilteredData.map((item) => item.crimes[crimeType] || 0),
       backgroundColor: `hsl(${index * 40}, 70%, 50%)`,
     })),
   };
@@ -200,57 +216,117 @@ const TrendDashboard = ({ kommunId, years }) => {
     ],
   };
 
+
+  console.log("Crime Data Datasets:", crimeData.datasets);
+  // Endast texten under varje chart är förändrad
   return (
     <div className="trend-dashboard grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* ---- 1: Medellivslängd ---- */}
       <div className="chart bg-white p-4 rounded shadow">
         <h3 className="text-xl font-semibold mb-2">Medellivslängd</h3>
         <Line data={lifeExpectancyData} options={{ responsive: true }} />
-        {trendInsights.map((trend, index) => (
-          <p key={index} className="text-sm text-gray-600">
-            {trend.yearRange}: Livslängden förändrades med {formatValue(trend.lifeTime)}%
-          </p>
-        ))}
+
+        <div className="mt-2 space-y-1">
+          {trendInsights.map((trend, i) => (
+            <p key={i} className="text-sm text-gray-700">
+              <span className="font-semibold text-blue-700">
+                {trend.yearRange}
+              </span>
+              : {interpretChange(trend.lifeTime, "livslängden")}
+            </p>
+          ))}
+        </div>
       </div>
+
+      {/* ---- 2: Medelålder ---- */}
       <div className="chart bg-white p-4 rounded shadow">
         <h3 className="text-xl font-semibold mb-2">Medelålder</h3>
         <Line data={averageAgeData} options={{ responsive: true }} />
-        {trendInsights.map((trend, index) => (
-          <p key={index} className="text-sm text-gray-600">
-            {trend.yearRange}: Medelåldern förändrades med {formatValue(trend.averageAge)}%
-          </p>
-        ))}
+
+        <div className="mt-2 space-y-1">
+          {trendInsights.map((trend, i) => (
+            <p key={i} className="text-sm text-gray-700">
+              <span className="font-semibold text-blue-700">
+                {trend.yearRange}
+              </span>
+              : {interpretChange(trend.averageAge, "medelåldern")}
+            </p>
+          ))}
+        </div>
       </div>
+
+      {/* ---- 3: Fastighetsförsäljningar ---- */}
       <div className="chart bg-white p-4 rounded shadow">
         <h3 className="text-xl font-semibold mb-2">Fastighetsförsäljningar</h3>
         <Bar data={realEstateSalesData} options={{ responsive: true }} />
-        {trendInsights.map((trend, index) => (
-          <p key={index} className="text-sm text-gray-600">
-            {trend.yearRange}: Totala försäljningar förändrades med{" "}
-            {formatValue(trend.totalSales)}% och genomsnittligt värde med{" "}
-            {formatValue(trend.avgSalesValue)}%
-          </p>
-        ))}
+
+        <div className="mt-2 space-y-1">
+          {trendInsights.map((trend, i) => (
+            <p key={i} className="text-sm text-gray-700">
+              <span className="font-semibold text-blue-700">
+                {trend.yearRange}
+              </span>
+              : totala försäljningar{" "}
+              {interpretChange(trend.totalSales, "är")}
+              {" och "}
+              {interpretChange(trend.avgSalesValue, "genomsnittsvärdet")}
+            </p>
+          ))}
+        </div>
       </div>
+
+      {/* ---- 4: Brottsfördelning ---- */}
       <div className="chart bg-white p-4 rounded shadow">
         <h3 className="text-xl font-semibold mb-2">Brottsfördelning</h3>
         <Bar data={crimeData} options={{ responsive: true, scales: { y: { beginAtZero: true } } }} />
-        {trendInsights.map((trend, index) => (
-          <p key={index} className="text-sm text-gray-600">
-            {trend.yearRange}: Brottstyper{" "}
-            {trend.crimeInsights.map((crime) => `${crime.type}: ${formatValue(crime.change)}%`).join(", ")}
-          </p>
-        ))}
+
+        <div className="mt-2 space-y-1">
+  {trendInsights.map((trend, i) => (
+    <p key={i} className="text-sm text-gray-700">
+      <span className="font-semibold text-blue-700">
+        {trend.yearRange}
+      </span>
+      : brottstyper{" "}
+      {trend.crimeInsights.map((crime, j) => (
+        <span key={j}>
+          <span
+            className="font-bold"
+            style={{
+              color: `hsl(${(j * 60) % 360}, 70%, 50%)`, // Dynamiskt genererad färg för crime.type
+            }}
+          >
+            {crime.type}
+          </span>
+          : {interpretChange(crime.change, "")}
+          {j < trend.crimeInsights.length - 1 ? ", " : ""}
+        </span>
+      ))}
+    </p>
+  ))}
+</div>
+
+
       </div>
+
+      {/* ---- 5: Skolresultat ---- */}
       <div className="chart bg-white p-4 rounded shadow">
         <h3 className="text-xl font-semibold mb-2">Skolresultat</h3>
-        <Bar data={schoolResultsData} options={{ responsive: true, scales: { y: { beginAtZero: true, max: 20 } } }} />
-        {trendInsights.map((trend, index) => (
-          <p key={index} className="text-sm text-gray-600">
-            {trend.yearRange}: Årskurs 9 betyg förändrades med{" "}
-            {formatValue(trend.schoolResultsYearNine)}%, Årskurs 6 med{" "}
-            {formatValue(trend.schoolResultsYearSix)}%
-          </p>
-        ))}
+        <Bar
+          data={schoolResultsData}
+          options={{ responsive: true, scales: { y: { beginAtZero: true, max: 20 } } }}
+        />
+
+        <div className="mt-2 space-y-1">
+          {trendInsights.map((trend, i) => (
+            <p key={i} className="text-sm text-gray-700">
+              <span className="font-semibold text-blue-700">
+                {trend.yearRange}
+              </span>
+              : åk9-betyg {interpretChange(trend.schoolResultsYearNine, "")},{" "}
+              åk6 {interpretChange(trend.schoolResultsYearSix, "")}
+            </p>
+          ))}
+        </div>
       </div>
     </div>
   );

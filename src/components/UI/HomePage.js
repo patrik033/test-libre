@@ -30,7 +30,7 @@ const HomePage = () => {
         id="hero"
         className="relative bg-cover bg-center bg-[url('/housing.jpg')] min-h-screen py-20 flex items-center justify-center"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black to-gray-900 to-gray-800 to-gray-700 opacity-90"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black to-gray-900 to-gray-800 to-gray-700 opacity-70"></div>
         <motion.div
           className="relative z-10 text-center px-4"
           initial={{ opacity: 0, y: 50 }}
@@ -128,7 +128,7 @@ const HomePage = () => {
 
       {/* Offers Section */}
       <section id="offers" className="relative py-16 bg-gray-600 text-white">
-        <div className="max-w-screen-2xl mx-auto text-center px-6 ">
+        <div className="max-w-screen-2xl mx-auto text-center px-6">
           <h2 className="text-4xl font-bold mb-6">Våra Tjänster</h2>
           <p className="text-lg mb-8 text-gray-300">
             Upptäck de viktigaste funktionerna som vår plattform erbjuder och börja analysera data på ett nytt sätt.
@@ -145,7 +145,7 @@ const HomePage = () => {
                     fill="currentColor"
                     className="w-12 h-12 text-blue-500"
                   >
-                    <path d="M12 3L2 12h3v9h6v-6h2v6h6v-9h3L12 3zM12 5.2l7 6.3V20h-3v-6H9v6H6v-8.5l6-5.3z" />
+                    <path d="M12 2L2 12h3v8h5v-4h4v4h5v-8h3L12 2zm0 3.5l7 7V18h-3v-4H8v4H5v-5.5l7-7z" />
                   </svg>
                 ),
               },
@@ -155,39 +155,13 @@ const HomePage = () => {
                 icon: (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 64 64"
+                    viewBox="0 0 48 48"
                     fill="currentColor"
                     className="w-12 h-12 text-teal-500"
                   >
-                    {/* <!-- Ytterkontur --> */}
-                    <circle
-                      cx="32"
-                      cy="32"
-                      r="30"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                    {/* <!-- Längd- och breddgrader --> */}
-                    <path
-                      d="M32 2C20.2 2 10 12.2 10 24s10.2 22 22 22 22-10.2 22-22S43.8 2 32 2z"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M2 32h60M32 2v60"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                    {/* <!-- Markörer --> */}
-                    <circle cx="22" cy="20" r="2" fill="#ff5722" />
-                    <circle cx="40" cy="32" r="2" fill="#ff5722" />
-                    <circle cx="28" cy="44" r="2" fill="#ff5722" />
+                    <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" strokeWidth="2" />
+                    <path d="M12 24h24M24 12v24M18 18l12 12M30 18l-12 12" stroke="currentColor" strokeWidth="2" />
                   </svg>
-
-
                 ),
               },
               {
@@ -200,9 +174,8 @@ const HomePage = () => {
                     fill="currentColor"
                     className="w-12 h-12 text-red-500"
                   >
-                    <path d="M6 2h9l5 5v15c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2zm0 2v16h12V8h-5V3H6zm2 12h8v2H8v-2zm0-4h8v2H8v-2zm0-4h5v2H8V8z" />
+                    <path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm3 3h6v2H9V9zm0 4h8v2H9v-2z" />
                   </svg>
-
                 ),
               },
             ].map((offer, index) => (
@@ -223,17 +196,16 @@ const HomePage = () => {
         </div>
       </section>
 
+
       <section
         id="try"
-        className="relative py-16 bg-gradient-to-b from-gray-600  to-gray-700 text-white"
+        className="relative py-16 bg-gradient-to-b from-gray-600 via-gray-700 to-gray-800 text-white"
       >
-        <div className="max-w-screen-2xl mx-auto text-center px-6 ">
+        <div className="max-w-screen-2xl mx-auto text-center px-6">
           <h2 className="text-4xl font-bold mb-6">Prova Vår Plattform</h2>
           <p className="text-lg mb-8 text-gray-300">
-            Testa en begränsad version av våra tjänster och upptäck hur vår plattform
-            kan hjälpa dig att analysera data och göra bättre beslut.
+            Testa en begränsad version av våra tjänster och upptäck hur vår plattform kan hjälpa dig att analysera data och fatta bättre beslut.
           </p>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
@@ -243,40 +215,12 @@ const HomePage = () => {
                 icon: (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 64 64"
+                    viewBox="0 0 24 24"
                     fill="currentColor"
-                    className="w-12 h-12 text-blue-500"
+                    className="w-12 h-12 text-blue-400"
                   >
-                    {/* <!-- Ytterkonturen --> */}
-                    <circle
-                      cx="32"
-                      cy="32"
-                      r="30"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                    {/* <!-- Kompassros --> */}
-                    <polygon
-                      points="32,6 37,24 32,20 27,24"
-                      fill="currentColor"
-                    />
-                    <polygon
-                      points="32,58 37,40 32,44 27,40"
-                      fill="#fbbf24"
-                    />
-                    <polygon
-                      points="58,32 40,37 44,32 40,27"
-                      fill="currentColor"
-                    />
-                    <polygon
-                      points="6,32 24,37 20,32 24,27"
-                      fill="#fbbf24"
-                    />
-                    {/* <!-- Centrumcirkel --> */}
-                    <circle cx="32" cy="32" r="4" fill="currentColor" />
+                    <path d="M3.5 3L9 5.5L15 3L21 5.5V21L15 18.5L9 21L3.5 18.5V3ZM9 8L4 6.5V17.5L9 19.5V8ZM10 19.5L14 17.5V6.5L10 8V19.5ZM15 6.5V17.5L20 19.5V8L15 6.5ZM12 12C13.1 12 14 11.1 14 10C14 8.9 13.1 8 12 8C10.9 8 10 8.9 10 10C10 11.1 10.9 12 12 12ZM12 13.2C10.3 13.2 8.8 14.1 7.9 15.4C7.7 15.6 7.9 16 8.2 16H15.8C16.1 16 16.3 15.6 16.1 15.4C15.2 14.1 13.7 13.2 12 13.2Z" />
                   </svg>
-
                 ),
                 buttonText: "Utforska",
                 buttonColor: "bg-blue-600 hover:bg-blue-700",
@@ -288,13 +232,12 @@ const HomePage = () => {
                 icon: (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
+                    viewBox="0 0 48 48"
                     fill="currentColor"
-                    className="w-12 h-12 text-green-500"
+                    className="w-12 h-12 text-green-400"
                   >
-                    <path d="M4 16h3v4H4v-4zm5-8h3v12h-3V8zm5 4h3v8h-3v-8zm5-6h3v14h-3V6z" />
+                    <path d="M4 40h8V20H4v20zm12-12h8V12h-8v16zm12-8h8V8h-8v20zm12-12h8v32h-8V8z" />
                   </svg>
-
                 ),
                 buttonText: "Analysera",
                 buttonColor: "bg-green-600 hover:bg-green-700",
@@ -306,13 +249,13 @@ const HomePage = () => {
                 icon: (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
+                    viewBox="0 0 48 48"
                     fill="currentColor"
-                    className="w-12 h-12 text-yellow-500"
+                    className="w-12 h-12 text-yellow-400"
                   >
-                    <path d="M6 2h9l5 5v15c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2zm0 2v16h12V8h-5V3H6zm2 12h8v2H8v-2zm0-4h8v2H8v-2zm0-4h5v2H8V8z" />
+                    <path d="M12 4h24l8 8v32H12V4zm24 2H14v36h28V14H30V6z" />
+                    <path d="M20 20h12v2H20v-2zm0 6h8v2h-8v-2z" />
                   </svg>
-
                 ),
                 buttonText: "Skapa Rapport",
                 buttonColor: "bg-yellow-600 hover:bg-yellow-700",
@@ -320,12 +263,10 @@ const HomePage = () => {
             ].map((tryItem, index) => (
               <div
                 key={index}
-                className="relative bg-gradient-to-t from-gray-600 via-gray-700 to-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center"
+                className="relative bg-gradient-to-t from-gray-600 via-gray-700 to-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center transform transition-transform hover:scale-105"
               >
                 <div className="mb-4">{tryItem.icon}</div>
-                <h3 className="text-2xl font-bold mb-4 text-gray-100">
-                  {tryItem.title}
-                </h3>
+                <h3 className="text-2xl font-bold mb-4 text-gray-100">{tryItem.title}</h3>
                 <p className="text-gray-300 text-center">{tryItem.description}</p>
                 <button
                   className={`${tryItem.buttonColor} mt-4 text-white px-4 py-2 rounded-full shadow-md transition-transform transform hover:scale-105`}
@@ -337,6 +278,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
 
 
 
@@ -384,7 +326,7 @@ const HomePage = () => {
                 image: "/skola.jpg",
                 date: "22 november 2023",
                 buttonText: "Se Detaljer",
-                      backgroundColorStart: "from-bg-gray-500",
+                backgroundColorStart: "from-bg-gray-500",
                 backgroundColorVia: "via-gray-600",
                 backgroundColorEnd: "to-gray-800",
 
@@ -413,9 +355,9 @@ const HomePage = () => {
                   <h3 className="text-2xl font-bold mb-2 text-white">{insight.title}</h3>
                   <p className="text-gray-300 mb-4 text-sm">{insight.description}</p>
                   {/* <button className="mt-auto bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform transform hover:scale-105"> */}
-                    <Link className="mt-auto bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform transform hover:scale-105 text-center" href={"/ComingSoon"}>
+                  <Link className="mt-auto bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform transform hover:scale-105 text-center" href={"/ComingSoon"}>
                     {insight.buttonText}
-                    </Link>
+                  </Link>
                   {/* </button> */}
                 </div>
               </div>
@@ -517,13 +459,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
-
-
-
-
-
-
     </div>
   );
 };
