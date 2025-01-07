@@ -62,35 +62,46 @@ const TrendDashboard = ({ kommunId, years }) => {
     });
   };
 
-  // Uppdaterad: loopar i stigande ordning
+  //Uppdaterad: loopar i stigande ordning
   const generateInsights = (data) => {
     const insights = [];
-    const focusCrimes = ["Rån", "Mord/dråp", "Mord/dråp, försök"];
-
+  
     for (let i = 0; i < data.length - 1; i++) {
       const current = data[i];
       const next = data[i + 1];
       if (!current || !next) continue;
-
+  
+      const focusCrimes = Object.keys(current.crimes || {});
+  
+      // Beräkna förändringar för varje brottstyp
       const crimeChanges = focusCrimes.map((crime) => {
         const currValue = current.crimes[crime] || 0;
         const nextValue = next.crimes[crime] || 0;
+  
         return {
           type: crime,
-          change: calculatePercentageChange(nextValue, currValue),
+          change: currValue === 0 && nextValue === 0
+            ? null
+            : calculatePercentageChange(nextValue, currValue),
         };
       });
-
-      const totalCrimesChange = calculatePercentageChange(
-        Object.values(next.crimes).reduce((sum, val) => sum + (val || 0), 0),
-        Object.values(current.crimes).reduce((sum, val) => sum + (val || 0), 0)
-      );
-
-      const relevantCrimeInsight =
-        crimeChanges.some((c) => c.change !== null)
-          ? crimeChanges.filter((c) => c.change !== null)
-          : [{ type: "Alla brott", change: totalCrimesChange }];
-
+  
+      // Filtrera bort brottstyper utan förändringar och sortera efter störst förändring
+      const sortedCrimes = crimeChanges
+        .filter((c) => c.change !== null)
+        .sort((a, b) => Math.abs(b.change) - Math.abs(a.change));
+  
+      // Välj den brottstyp med störst förändring
+      const topCrimeChange = sortedCrimes.length > 0 ? sortedCrimes[0] : null;
+  
+      // Beräkna total förändring för alla brott
+      const totalCrimesCurrent = Object.values(current.crimes || {}).reduce((sum, val) => sum + (val || 0), 0);
+      const totalCrimesNext = Object.values(next.crimes || {}).reduce((sum, val) => sum + (val || 0), 0);
+  
+      const totalCrimesChange = totalCrimesCurrent === 0 && totalCrimesNext === 0
+        ? null
+        : calculatePercentageChange(totalCrimesNext, totalCrimesCurrent);
+  
       insights.push({
         yearRange: `${current.year} - ${next.year}`,
         lifeTime: calculatePercentageChange(next.lifeTime, current.lifeTime),
@@ -99,11 +110,16 @@ const TrendDashboard = ({ kommunId, years }) => {
         avgSalesValue: calculatePercentageChange(next.avgSalesValue, current.avgSalesValue),
         schoolResultsYearNine: calculatePercentageChange(next.schoolResultsYearNine, current.schoolResultsYearNine),
         schoolResultsYearSix: calculatePercentageChange(next.schoolResultsYearSix, current.schoolResultsYearSix),
-        crimeInsights: relevantCrimeInsight,
+        crimeInsights: topCrimeChange
+          ? [{ type: topCrimeChange.type, change: topCrimeChange.change }]
+          : [{ type: "Alla brott", change: totalCrimesChange }],
       });
     }
+  
     return insights;
   };
+  
+  
 
   // Oförändrat: hämta data
   useEffect(() => {
@@ -217,7 +233,8 @@ const TrendDashboard = ({ kommunId, years }) => {
   };
 
 
-  console.log("Crime Data Datasets:", crimeData.datasets);
+
+  console.log("Crime Data Datasets:", crimeData);
   // Endast texten under varje chart är förändrad
   return (
     <div className="trend-dashboard grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -281,29 +298,29 @@ const TrendDashboard = ({ kommunId, years }) => {
         <Bar data={crimeData} options={{ responsive: true, scales: { y: { beginAtZero: true } } }} />
 
         <div className="mt-2 space-y-1">
-  {trendInsights.map((trend, i) => (
-    <p key={i} className="text-sm text-gray-700">
-      <span className="font-semibold text-blue-700">
-        {trend.yearRange}
-      </span>
-      : brottstyper{" "}
-      {trend.crimeInsights.map((crime, j) => (
-        <span key={j}>
-          <span
-            className="font-bold"
-            style={{
-              color: `hsl(${(j * 60) % 360}, 70%, 50%)`, // Dynamiskt genererad färg för crime.type
-            }}
-          >
-            {crime.type}
-          </span>
-          : {interpretChange(crime.change, "")}
-          {j < trend.crimeInsights.length - 1 ? ", " : ""}
-        </span>
-      ))}
-    </p>
-  ))}
-</div>
+          {trendInsights.map((trend, i) => (
+            <p key={i} className="text-sm text-gray-700">
+              <span className="font-semibold text-blue-700">
+                {trend.yearRange}
+              </span>
+              : brottstyper{" "}
+              {trend.crimeInsights.map((crime, j) => (
+                <span key={j}>
+                  <span
+                    className="font-bold"
+                    style={{
+                      color: `hsl(${(j * 60) % 360}, 70%, 50%)`, // Dynamiskt genererad färg för crime.type
+                    }}
+                  >
+                    {crime.type}
+                  </span>
+                  : {interpretChange(crime.change, "")}
+                  {j < trend.crimeInsights.length - 1 ? ", " : ""}
+                </span>
+              ))}
+            </p>
+          ))}
+        </div>
 
 
       </div>

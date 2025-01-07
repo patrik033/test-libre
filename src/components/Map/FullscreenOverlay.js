@@ -7,7 +7,6 @@ const FullscreenOverlay = ({ propertiesToSend, onClose }) => {
     const [loading, setLoading] = useState(true); // Hanterar laddningstillstånd
     const [error, setError] = useState(false); // Hanterar fel
 
-    console.log(propertiesToSend)
     useEffect(() => {
         if (!propertiesToSend) {
             console.error("Ingen property skickades till overlayen!");
@@ -23,7 +22,6 @@ const FullscreenOverlay = ({ propertiesToSend, onClose }) => {
                 const response = await fetch(`https://localhost:7150/api/kommuner/realEstateById/${propertiesToSend}`);
                 if (!response.ok) throw new Error("Failed to fetch property data");
                 const data = await response.json();
-                console.log(data)
                 setProperty(data);
             } catch (error) {
                 console.error("Error fetching property data:", error);

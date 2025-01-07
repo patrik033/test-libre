@@ -1,5 +1,5 @@
 import mapboxgl from 'mapbox-gl';
-import { getFeatureBounds } from '../Map/MapUtils';
+import { getFeatureBounds } from '../MapUtils';
 /**
  * Loads municipality boundaries for a given county and adds them to the map.
  *

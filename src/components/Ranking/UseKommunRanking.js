@@ -13,9 +13,12 @@ const useKommunRanking = (initialYear, initialPage, pageSize) => {
     if (!year) return; // Ladda inte data om inget år är valt
 
     setLoading(true);
+
+
+
     try {
       const response = await fetch(
-        `https://localhost:7150/api/trends/ranking?year=${year}&currentPage=${page}&pageSize=${pageSize}`
+        `https://localhost:7150/api/trends/ranking?Year=${year}&Page=${page}&PageSize=${pageSize}`
       );
 
       if (!response.ok) {

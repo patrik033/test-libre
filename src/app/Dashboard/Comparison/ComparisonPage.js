@@ -44,10 +44,12 @@ const ComparisonPage = () => {
     setShowResults(false);
 
     const requestBody = {
-      municipality1: selectedMunicipality1,
-      municipality2: selectedMunicipality2,
-      parameters: selectedParameters,
+      Municipality1: selectedMunicipality1,
+      Municipality2: selectedMunicipality2,
+      Parameters: selectedParameters,
     };
+
+  
 
     try {
       const response = await fetch("https://localhost:7150/api/comparison", {
@@ -56,7 +58,7 @@ const ComparisonPage = () => {
         body: JSON.stringify(requestBody),
       });
       const data = await response.json();
-      console.log("API Response:", data); // Lägg till denna logg
+      //console.log("API Response:", data); // Lägg till denna logg
       setComparisonResults(data);
       setLoadedParameters([...selectedParameters]);
       setShowResults(true);

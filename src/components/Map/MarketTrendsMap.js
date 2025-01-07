@@ -7,11 +7,14 @@ import '@geoapify/geocoder-autocomplete/styles/minimal.css'
 
 import Sidebar from '../UI/Sidebar';
 import { getFeatureBounds } from './MapUtils';
-import { loadCountyBoundaries, addCountyEventListeners } from '../Layers/LoadCountryBoundariesLayer';
-import { addCountyPopupEvents } from '@/components/Layers/AddCountyBoundaryHoverPopup';
-import { loadMunicipalities } from '@/components/Layers/LoadMunicipalitiesLayer';
-import { loadNoisePollutionData } from '@/components/Layers/LoadNoisePollutionLayer';
-import { updateFilters } from '@/components/Layers/CreateNoisePollutionLayerControls';
+
+import { loadCountyBoundaries,addCountyEventListeners } from './Layers/LoadCountryBoundariesLayer';
+
+
+import { addCountyPopupEvents } from './Layers/AddCountyBoundaryHoverPopup';
+import { loadMunicipalities } from './Layers/LoadMunicipalitiesLayer';
+import { loadNoisePollutionData } from './Layers/LoadNoisePollutionLayer';
+import { updateFilters } from './Layers/CreateNoisePollutionLayerControls';
 import FullscreenOverlay from './FullscreenOverlay';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
