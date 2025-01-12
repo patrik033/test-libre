@@ -20,7 +20,7 @@ const Dashboard = ({ kommun }) => {
     // Hämta KPI-data
     const fetchKPIData = async () => {
       try {
-        const response = await fetch(`https://localhost:7150/api/Dashboard/kpi?kommun=${kommun.Kommun}`);
+        const response = await fetch(`https://localhost:7150/api/Dashboard/kpi?KommunId=${kommun.Kommun}`);
         const data = await response.json();
         setKpiData(data);
       } catch (error) {
