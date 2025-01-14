@@ -4,13 +4,13 @@ import { updateFilters } from './CreateNoisePollutionLayerControls';
 export const loadNoisePollutionData = async (map, municipalityId, municipalityName, roadFilter, showRailway, showIndustry, showSchools,noiseDataCache) => {
     try {
         if (!noiseDataCache.current) {
-            console.log(`Laddar bullerdata för: ${municipalityName} från servern`);
+            // console.log(`Laddar bullerdata för: ${municipalityName} från servern`);
             const response = await fetch('/export.geojson'); // Eskilstunas bullerdata
             const rawData = await response.json();
             noiseDataCache.current = createNoisePollutionGeoJSON(rawData); // Cachar datan
         }
         else{
-            console.log(`Använder cachad bullerdata för: ${municipalityName}`);
+            // console.log(`Använder cachad bullerdata för: ${municipalityName}`);
         }
 
         const noiseGeoJSON = noiseDataCache.current;

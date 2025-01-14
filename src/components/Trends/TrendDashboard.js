@@ -136,7 +136,7 @@ const TrendDashboard = ({ kommunId, years }) => {
         if (!response.ok) throw new Error("Kunde inte hämta trenddata.");
 
         const rawData = await response.json();
-        console.log(rawData)
+        // console.log(rawData)
         const sortedData = rawData.sort((a, b) => a.year - b.year); // stigande ordning
         const filledData = fillMissingYears(sortedData, years);
 
@@ -234,7 +234,7 @@ const TrendDashboard = ({ kommunId, years }) => {
 
 
 
-  console.log("Crime Data Datasets:", crimeData);
+  //console.log("Crime Data Datasets:", crimeData);
   // Endast texten under varje chart är förändrad
   return (
     <div className="trend-dashboard grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

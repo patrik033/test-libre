@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { GeoapifyGeocoderAutocomplete, GeoapifyContext } from '@geoapify/react-geocoder-autocomplete'
 import '@geoapify/geocoder-autocomplete/styles/minimal.css'
 
 
-import Sidebar from '../UI/Sidebar';
+import MapSidebar from '../UI/MapSidebar';
 import { getFeatureBounds } from './MapUtils';
 
-import { loadCountyBoundaries,addCountyEventListeners } from './Layers/LoadCountryBoundariesLayer';
+import { loadCountyBoundaries } from './Layers/LoadCountryBoundariesLayer';
 
 
 import { addCountyPopupEvents } from './Layers/AddCountyBoundaryHoverPopup';
@@ -47,6 +46,9 @@ const MarketTrendsMap = () => {
 
   const [currentMunicipalityRef, setCurrentMunicipalityRef] = useState(null);
   const [realEstateData, setRealEstateData] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [selectedPoint, setSelectedPoint] = useState(null); // State för modaldata
 
@@ -310,11 +312,25 @@ const MarketTrendsMap = () => {
   }, [roadFilter, showRailway, showIndustry, showSchools]);
 
 
+  function removePropertyMarkers(map) {
+    if (!map) return;
+    if (map.getLayer('property-markers')) {
+      map.removeLayer('property-markers');
+    }
+    if (map.getSource('property-data')) {
+      map.removeSource('property-data');
+    }
+  }
+
 
   const goBackToCountyView = () => {
     setMarkedMunicipalityName(null);
     const map = mapRef.current;
     if (map) {
+      setIsNoiseFilterChecked(false);
+      setIsPropertyDataChecked(false)
+      removePropertyMarkers(map);
+      setRealEstateData([]);
       setIsMunicipalityView(false);
       setIsCountyView(true);
 
@@ -371,6 +387,13 @@ const MarketTrendsMap = () => {
     setMarkedMunicipalityName(null);
     const map = mapRef.current;
     if (map) {
+
+      removePropertyMarkers(map);
+      setIsNoiseFilterChecked(false);
+      setIsPropertyDataChecked(false)
+    // Rensa listan i state:
+    setRealEstateData([]);
+
       setIsCountryView(true);
       setIsCountyView(false);
       setIsMunicipalityView(false);
@@ -443,82 +466,12 @@ const MarketTrendsMap = () => {
 
 
 
-  function onPlaceSelect(value) {
-    console.log({ onPlaceSelect: value });
-
-    if (value && value.properties) {
-      const { lon, lat, formatted } = value.properties;
-
-      // Centrera kartan på de valda koordinaterna
-      if (mapRef.current) {
-
-        const map = mapRef.current;
-
-
-        if (map.getSource('county-boundaries')) {
-          console.log("FOUND IT!!!")
-          //map.removeLayer('county-boundaries');
-          //map.removeLayer('county-boundaries-outline');
-          // map.removeSource('county-boundaries');
-
-        }
-
-
-        if (map.getSource('selected-municipality')) {
-          map.removeLayer('selected-municipality-boundary');
-          map.removeSource('selected-municipality');
-        }
-
-        if (map.getSource('municipalities')) {
-          map.removeLayer('municipality-boundaries');
-          map.removeLayer('municipality-boundaries-outline');
-          map.removeSource('municipalities');
-        }
-
-        if (map.getSource('noise-data')) {
-          map.removeLayer('road-layer');
-          map.removeLayer('railway-layer');
-          map.removeLayer('industry-layer');
-          map.removeLayer('school-layer');
-          map.removeSource('noise-data');
-        }
-
-
-
-        mapRef.current.flyTo({
-          center: [lon, lat],
-          zoom: 12,
-          essential: true,
-        });
-      }
-
-
-    }
-  }
-
-  function onSuggectionChange(value) {
-    //console.log({onSuggestion: value});
-  }
-
-  function onUserInput(input) {
-    //console.log({onUserInput: input});
-  }
-  function onOpen(opened) {
-    //console.log({onOpen:opened});
-  }
-
-  function onClose(closed) {
-    //console.log({onOpen: closed})
-  }
-
-
-
-
+  
 
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
-      <Sidebar
+      <MapSidebar
         className="w-full md:w-64 bg-gray-800 text-white p-4"
         isNoiseFilterChecked={isNoiseFilterChecked}
         setIsNoiseFilterChecked={setIsNoiseFilterChecked}

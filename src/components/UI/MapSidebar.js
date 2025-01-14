@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 
-const Sidebar = ({
+const MapSidebar = ({
   isNoiseFilterChecked,
   setIsNoiseFilterChecked,
   isPropertyDataChecked,
@@ -100,7 +100,7 @@ const Sidebar = ({
       )}
 
       {/* Fastighetsdata filter */}
-      {showFilterOptions && (
+      {/* {showFilterOptions && (
         <div className="mt-4">
           <button
             onClick={() => setIsPropertyFilterOpen(!isPropertyFilterOpen)}
@@ -121,7 +121,7 @@ const Sidebar = ({
             </div>
           )}
         </div>
-      )}
+      )} */}
 
       {/* Länk för att öppna dashboard */}
       <Link href="/Dashboard" className="block w-full p-2 mt-4 text-center bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded">
@@ -139,4 +139,4 @@ const Sidebar = ({
   );
 };
 
-export default Sidebar;
+export default MapSidebar;

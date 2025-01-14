@@ -18,7 +18,7 @@ const createRoadFilter = (roadFilter) => {
     const roadFilterLayer = createRoadFilter(roadFilter);
 
     // Kontrollera och logga lagerstatus
-    console.log("Uppdaterar filter. Kontrollerar lager:");
+    //console.log("Uppdaterar filter. Kontrollerar lager:");
 
     if (map.getLayer('road-layer')) {
         //console.log("road-layer finns");

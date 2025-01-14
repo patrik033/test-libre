@@ -33,7 +33,7 @@ const Dashboard = ({ kommun }) => {
     // Hämta Chart-data
     const fetchChartData = async () => {
       try {
-        const response = await fetch(`https://localhost:7150/api/Dashboard/charts?kommun=${kommun.Kommun}`);
+        const response = await fetch(`https://localhost:7150/api/Dashboard/charts?KommunId=${kommun.Kommun}`);
         const data = await response.json();
         setChartData(data);
       } catch (error) {

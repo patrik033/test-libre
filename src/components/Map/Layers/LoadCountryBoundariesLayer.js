@@ -1,27 +1,28 @@
 // MapBoundaries.js
-import mapboxgl from 'mapbox-gl';//
-const GEOAPIFY_API_KEY = process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY;
+import mapboxgl from 'mapbox-gl';
+
+// INGET "NEXT_PUBLIC_GEOAPIFY_API_KEY" längre!
 
 export const loadCountyBoundaries = async (map, countyBoundariesData) => {
   try {
+    // 1) Anropa VÅRT EGET endpoint, i stället för Geoapify direkt
+    //    Skicka med "id" som query-param (ex: countyId eller fast hårdkodat)
     const response = await fetch(
-      `https://api.geoapify.com/v1/boundaries/consists-of?id=5142d55085d8612e4059081227fc410e4f40f00101f90156ce000000000000c0020b92030753766572696765&geometry=geometry_1000&apiKey=${GEOAPIFY_API_KEY}`
+      '/api/geoapify?id=5142d55085d8612e4059081227fc410e4f40f00101f90156ce000000000000c0020b92030753766572696765',{
+        next: {revalidate: 3600}
+      }
     );
-    const data = await response.json();
-
-   
-
-    // Om Gotland saknas, lägg till Gotlands-data separat
-    if (!data.features.some(feature => feature.properties.name === "Gotlands län")) {
-      const responseGotland = await fetch('/gotland.json');
-      const gotlandData = await responseGotland.json();
-      data.features.push(gotlandData.features[0]);
+    if (!response.ok) {
+      throw new Error(`Kunde inte hämta countyBoundaries: ${response.status}`);
     }
 
-    // Spara data till countyBoundariesData-referensen
+    // 2) Hämta JSON-svaret
+    const data = await response.json();
+
+    // 3) Spara data i ref
     countyBoundariesData.current = data;
 
-    // Lägg till source och layer för länsgränser på kartan
+    // 4) Lägg till källan i kartan
     map.addSource('county-boundaries', {
       type: 'geojson',
       data,
@@ -47,26 +48,27 @@ export const loadCountyBoundaries = async (map, countyBoundariesData) => {
       },
     });
 
+    // 5) Popup- och hover-effekt
     const popup = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-      });
-  
-      // Lägg till hover-effekt för län
-      map.on('mousemove', 'county-boundaries', (e) => {
-        const features = map.queryRenderedFeatures(e.point, { layers: ['county-boundaries'] });
-        if (features.length) {
-          const feature = features[0];
-          map.getCanvas().style.cursor = 'pointer';
-          popup.setLngLat(e.lngLat).setHTML(`<strong>${feature.properties.name}</strong>`).addTo(map);
-        }
-      });
-  
-      map.on('mouseleave', 'county-boundaries', () => {
-        map.getCanvas().style.cursor = '';
-        popup.remove();
-      });
+      closeButton: false,
+      closeOnClick: false,
+    });
+
+    map.on('mousemove', 'county-boundaries', (e) => {
+      const features = map.queryRenderedFeatures(e.point, { layers: ['county-boundaries'] });
+      if (features.length) {
+        const feature = features[0];
+        map.getCanvas().style.cursor = 'pointer';
+        popup.setLngLat(e.lngLat).setHTML(`<strong>${feature.properties.name}</strong>`).addTo(map);
+      }
+    });
+
+    map.on('mouseleave', 'county-boundaries', () => {
+      map.getCanvas().style.cursor = '';
+      popup.remove();
+    });
+
   } catch (error) {
-    console.error('Fel vid hämtning av länsdata:', error);
+    console.error('Fel vid hämtning av countyBoundaries:', error);
   }
 };

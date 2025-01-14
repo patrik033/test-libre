@@ -45,7 +45,7 @@ const DashboardNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedGroup, setExpandedGroup] = useState(null);
   const pathname = usePathname();
-console.log(pathname)
+
   return (
     <div className="lg:hidden mb-8">
       <nav className="bg-gray-800 text-white fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4 h-16">
