@@ -9,6 +9,8 @@ const showSelectedMunicipalityBoundary = (
   onMunicipalityRefUpdate
 ) => {
   const municipalityRef = municipalityFeature.properties.ref;
+  
+  
   const municipalityBoundary = {
     type: 'FeatureCollection',
     features: [municipalityFeature],
@@ -34,6 +36,7 @@ const showSelectedMunicipalityBoundary = (
   }
 
   if (!bubbledRefs.has(municipalityRef)) {
+    
     bubbledRefs.add(municipalityRef);
     if (onMunicipalityRefUpdate) {
       onMunicipalityRefUpdate(municipalityRef);
@@ -54,12 +57,29 @@ export const loadMunicipalities = async (
 ) => {
   try {
     // ===> Viktig skillnad: anropa din egen API-route i stället <===
-    const response = await fetch('/api/municipalities', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ countyId }),
+
+
+    const response = await fetch(`/api/municipalities?id=${countyId}`, {
+      // method: 'POST',
+      // headers: { 'Content-Type': 'application/json' },
+      // body: JSON.stringify({ countyId }),
     });
     const data = await response.json();
+
+
+
+    // const GEOAPIFY_API_KEY = process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY;
+    // let data;
+    // if (countyId === "51328cf5b565983240596486d4b7f1d24c40f00101f9016b2d110000000000c0020892030f476f746c616e6473206b6f6d6d756e") {
+    //   const response = await fetch("/gotland-kommun.json");
+    //   data = await response.json();
+    // } else {
+    //   const response = await fetch(
+    //     `https://api.geoapify.com/v1/boundaries/consists-of?id=${countyId}&geometry=geometry_1000&apiKey=${GEOAPIFY_API_KEY}`
+    //   );
+    //   data = await response.json();
+    // }
+
 
     // Spara data i en ref (t.ex. municipalityBoundariesData.current)
     municipalityBoundariesData.current = data;
@@ -130,6 +150,7 @@ export const loadMunicipalities = async (
         // Kalla på callback för ref-uppdatering
         if (onMunicipalityRefUpdate) {
           onMunicipalityRefUpdate(municipalityRef);
+          //console.log(municipalityRef)
         }
 
         // Sätt states för vald kommun

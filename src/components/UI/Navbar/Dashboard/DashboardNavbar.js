@@ -16,13 +16,13 @@ const dashboardLinks = [
     category: "Dashboard",
     links: [
       { href: "/Dashboard", label: "Översikt" },
-      { href: "/Dashboard/Settings", label: "Inställningar" },
+      // { href: "/Dashboard/Settings", label: "Inställningar" },
     ],
   },
   {
     category: "Statistics",
     links: [
-      { href: "/Dashboard/Statistics", label: "Statistik" },
+      // { href: "/Dashboard/Statistics", label: "Statistik" },
       { href: "/Dashboard/Comparison", label: "Comparison" },
       { href: "/Dashboard/Trend", label: "Trender" },
       { href: "/Dashboard/Ranking", label: "Ranking" },

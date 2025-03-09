@@ -1,7 +1,7 @@
 "use client"
 
-import DashboardNavbar from "./navs/DashboardNavbar"; // Specifik navbar för dashboard
-import DashboardSidebar from "./navs/DashboardSidebar"; // Dashboard-sidomeny
+import DashboardNavbar from "../../components/UI/Navbar/Dashboard/DashboardNavbar"; // Specifik navbar för dashboard
+import DashboardSidebar from "../../components/UI/Navbar/Dashboard/DashboardSidebar"; // Dashboard-sidomeny
 import Footer from "@/components/UI/Footer/Footer";
 
 export default function Layout({ children }) {

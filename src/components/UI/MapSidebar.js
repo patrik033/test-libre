@@ -46,7 +46,7 @@ const MapSidebar = ({
             checked={isPropertyDataChecked}
             onChange={(e) => {
               setIsPropertyDataChecked(e.target.checked);
-              // if (e.target.checked) loadSelectedDataType("Fastighetsdata");
+              if (e.target.checked) loadSelectedDataType("Fastighetsdata");
             }}
           />
           <span className="ml-2">Fastighetsdata</span>

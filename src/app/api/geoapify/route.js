@@ -22,7 +22,7 @@ export async function GET(request) {
       }
     );
     const data = await geoapifyRes.json();
-
+    //console.log(data)
     // 4) Exempel: kolla Gotland
     const gotlandExists = data.features?.some(
       (feature) => feature.properties.name === 'Gotlands län'
@@ -46,7 +46,6 @@ export async function GET(request) {
       'Cache-Control',
       'public, max-age=3600, stale-while-revalidate=86400'
     );
-
     return response;
   } catch (error) {
     console.error('Fel i /api/geoapify:', error);

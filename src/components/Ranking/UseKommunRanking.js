@@ -26,9 +26,10 @@ const useKommunRanking = (initialYear, initialPage, pageSize) => {
       }
 
       const result = await response.json();
-      setData(result.items);
-      setCurrentPage(result.currentPage);
-      setTotalPages(result.totalPages);
+      const extractedData = result.data;
+      setData(extractedData.items);
+      setCurrentPage(extractedData.currentPage);
+      setTotalPages(extractedData.totalPages);
 
 
  

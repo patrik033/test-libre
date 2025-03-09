@@ -58,8 +58,8 @@ const ComparisonPage = () => {
         body: JSON.stringify(requestBody),
       });
       const data = await response.json();
-      //console.log("API Response:", data); // Lägg till denna logg
-      setComparisonResults(data);
+      console.log("API Response:", data); // Lägg till denna logg
+      setComparisonResults(data.data);
       setLoadedParameters([...selectedParameters]);
       setShowResults(true);
     } catch (err) {
@@ -178,7 +178,6 @@ const ComparisonPage = () => {
                 },
               ],
             };
-
             return (
               <div key={param.id} className="bg-white p-4 rounded shadow">
                 <h2 className="text-xl font-bold mb-4">{param.label}</h2>
@@ -188,62 +187,62 @@ const ComparisonPage = () => {
                 <div className="mt-4 text-gray-700">
                   <h3 className="text-lg font-semibold mb-2 text-center">Procentuell skillnad</h3>
                   <ul className="text-sm space-y-1">
-                    {resultsForParameter.map((result, index) => {
-                      const { percentageDifference, value1, value2, fieldName } = result;
+                  {
+  resultsForParameter.map((result, index) => {
+    let { percentageDifference, value1, value2, fieldName } = result;
 
-                      let comparisonText;
-                      if (percentageDifference === 0) {
-                        comparisonText = (
-                          <span>
-                            <strong>{getMunicipalityName(selectedMunicipality1)}</strong> hade samma värde som{" "}
-                            <strong>{getMunicipalityName(selectedMunicipality2)}</strong> för{" "}
-                            <strong>{fieldName}</strong>.
-                          </span>
-                        );
-                      } else if (Math.abs(percentageDifference) >= 100) {
-                        const times = (value1 / value2).toFixed(2); // Beräkna hur många gånger större/mindre
-                        comparisonText = (
-                          <span>
-                            <strong>{getMunicipalityName(selectedMunicipality1)}</strong>{" "}
-                            var <strong>{times} gånger</strong>{" "}
-                            {percentageDifference > 0 ? "större" : "mindre"} än{" "}
-                            <strong>{getMunicipalityName(selectedMunicipality2)}</strong> för{" "}
-                            <strong>{fieldName}</strong>.
-                          </span>
-                        );
-                      } else {
-                        comparisonText = (
-                          <span>
-                            <strong>{getMunicipalityName(selectedMunicipality1)}</strong> hade{" "}
-                            <strong
-                              className={
-                                percentageDifference > 0 ? "text-green-500" : "text-red-500"
-                              }
-                            >
-                              {percentageDifference > 0 ? "högre" : "lägre"}
-                            </strong>{" "}
-                            värde med <span className="font-bold">{percentageDifference.toFixed(2)}%</span> än{" "}
-                            <strong>{getMunicipalityName(selectedMunicipality2)}</strong> för{" "}
-                            <strong>{fieldName}</strong>.
-                          </span>
-                        );
-                      }
+    // Kommunnamn
+    let municipality1 = getMunicipalityName(selectedMunicipality1);
+    let municipality2 = getMunicipalityName(selectedMunicipality2);
 
-                      return (
-                        <li
-                          key={index}
-                          className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm md:text-base"
-                        >
-                          <FaPercentage className="text-green-500" />
-                          {comparisonText}
-                        </li>
-                      );
-                    })}
+    // Om value2 är större än value1, byt plats på kommunerna OCH negagera percentageDifference
+    if (value2 > value1) {
+      [value1, value2] = [value2, value1]; // Byt plats på värdena
+      [municipality1, municipality2] = [municipality2, municipality1]; // Byt plats på kommunnamn
+      percentageDifference = -percentageDifference; // Negera skillnaden
+    }
+
+    let comparisonText;
+    
+    if (percentageDifference === 0) {
+      // Fall 1: Inga skillnader mellan kommunerna
+      comparisonText = (
+        <span>
+          <strong>{municipality1}</strong> och <strong>{municipality2}</strong> hade samma värde för{" "}
+          <strong>{fieldName}</strong>.
+        </span>
+      );
+    } else {
+      // Fall 2: Normal procentuell skillnad
+      comparisonText = (
+        <span>
+          <strong>{municipality1}</strong> hade{" "}
+          <strong className="text-green-500">
+            högre
+          </strong>{" "}
+          värde med <span className="font-bold">{Math.abs(percentageDifference).toFixed(2)}%</span> än{" "}
+          <strong>{municipality2}</strong> för <strong>{fieldName}</strong>.
+        </span>
+      );
+    }
+
+    return (
+      <li
+        key={index}
+        className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm md:text-base"
+      >
+        <FaPercentage className="text-green-500" />
+        {comparisonText}
+      </li>
+    );
+  })
+}
+
                   </ul>
                 </div>
               </div>
-
             );
+            
           })}
         </div>
       )}

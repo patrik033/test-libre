@@ -136,8 +136,9 @@ const TrendDashboard = ({ kommunId, years }) => {
         if (!response.ok) throw new Error("Kunde inte hämta trenddata.");
 
         const rawData = await response.json();
-        // console.log(rawData)
-        const sortedData = rawData.sort((a, b) => a.year - b.year); // stigande ordning
+        const dataExtracted = rawData.data;
+   
+        const sortedData = dataExtracted.sort((a, b) => a.year - b.year); // stigande ordning
         const filledData = fillMissingYears(sortedData, years);
 
         setTrendData(filledData);

@@ -15,7 +15,7 @@ const KommunRankingTable = ({ data, loading }) => {
             <th className="px-6 py-3 text-left text-sm font-semibold">Rank</th>
             <th className="px-6 py-3 text-left text-sm font-semibold">Kommun</th>
             <th className="px-6 py-3 text-left text-sm font-semibold">Total Poäng</th>
-            <th className="px-6 py-3 text-left text-sm font-semibold">Poäng­förändring</th>
+            {/* <th className="px-6 py-3 text-left text-sm font-semibold">Poäng­förändring</th> */}
             <th className="px-6 py-3 text-left text-sm font-semibold">Placering­förändring</th>
           </tr>
         </thead>
@@ -51,9 +51,9 @@ const KommunRankingTable = ({ data, loading }) => {
                 <td className="px-6 py-3 border-b text-sm text-gray-700">
                   {item.totalScore.toFixed(2)}
                 </td>
-                <td className="px-6 py-3 border-b text-sm text-gray-700">
+                {/* <td className="px-6 py-3 border-b text-sm text-gray-700">
                   {scoreChangeDisplay}
-                </td>
+                </td> */}
                 <td className="px-6 py-3 border-b text-sm text-gray-700">
                   {rankChangeDisplay}
                 </td>

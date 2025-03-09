@@ -152,20 +152,22 @@ const MarketTrendsMap = () => {
 
   useEffect(() => {
     if (!currentMunicipalityRef) return;
-
+    //console.log(currentMunicipalityRef)
 
     const fetchRealEstateData = async () => {
       try {
 
-        const response = await fetch(`https://localhost:7150/api/kommuner/realestate/${currentMunicipalityRef}`);
+        const response = await fetch(`https://localhost:7150/api/realestate/getAllForMuniplicity/${currentMunicipalityRef}`);
         const data = await response.json();
-        setRealEstateData(data);
+        //console.log(data)
+        setRealEstateData(data.data);
       } catch (error) {
         console.error('Error fetching real estate data:', error);
       }
     };
 
     fetchRealEstateData();
+
   }, [currentMunicipalityRef]);
 
   // Lägg till fastighetspunkter när fastighetsdata är laddad
@@ -197,6 +199,7 @@ const MarketTrendsMap = () => {
   };
 
   const onMunicipalityRefUpdate = (currentMunicipality) => {
+    //console.log(currentMunicipality)
     setCurrentMunicipalityRef(null)
     setCurrentMunicipalityRef(currentMunicipality)
   }
@@ -374,11 +377,11 @@ const MarketTrendsMap = () => {
   const loadSelectedDataType = async (dataType) => {
     const map = mapRef.current;
     if (dataType === "BullerFilter" && isNoiseFilterChecked) {
-      console.log(dataType)
+      //console.log(dataType)
       // Ladda bullerdata om checkbox är markerad
       await loadNoisePollutionData(map, currentMunicipalityId);
     } else if (dataType === "Fastighetsdata" && isPropertyDataChecked) {
-      console.log(dataType)
+      //console.log(dataType)
 
     }
   };

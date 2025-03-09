@@ -3,11 +3,20 @@ import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 
-export async function POST(request) {
-  const { countyId } = await request.json();
-  const GEOAPIFY_API_KEY = process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY;
-
+export async function GET(request) {
+  
   try {
+    
+    const { searchParams } = new URL(request.url);
+
+    const countyId = searchParams.get('id') || '';
+
+    const apiKey = process.env.GEOAPIFY_API_KEY;
+    if (!apiKey) {
+      throw new Error('Saknar GEOAPIFY_API_KEY i .env');
+    }
+
+
     let data;
 
     // Exempel: särskild logik för Gotland
@@ -17,15 +26,27 @@ export async function POST(request) {
       data = JSON.parse(fileData);
     } else {
       // Annars anropa Geoapify
-      const response = await fetch(
-        `https://api.geoapify.com/v1/boundaries/consists-of?id=${countyId}&geometry=geometry_1000&apiKey=${GEOAPIFY_API_KEY}`,{
-          next: {revalidate: 3600}
+
+      const municipalitiesCounty = await fetch(
+        `https://api.geoapify.com/v1/boundaries/consists-of?id=${countyId}&geometry=geometry_1000&apiKey=${apiKey}`,
+        {
+          next: { revalidate: 3600 }, // Server-side revalidation i Next.js
         }
+
       );
-      data = await response.json();
+      data = await municipalitiesCounty.json();
+     
     }
 
-    return NextResponse.json(data);
+
+    const responseCached = NextResponse.json(data);
+
+    responseCached.headers.set(
+      'Cache-Control',
+      'public, max-age=3600, stale-while-revalidate=86400'
+    );
+
+    return responseCached
   } catch (error) {
     console.error("Error loading municipalities data:", error);
     return NextResponse.json(

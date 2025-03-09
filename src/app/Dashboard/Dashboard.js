@@ -20,9 +20,9 @@ const Dashboard = ({ kommun }) => {
     // Hämta KPI-data
     const fetchKPIData = async () => {
       try {
-        const response = await fetch(`https://localhost:7150/api/Dashboard/kpi?KommunId=${kommun.Kommun}`);
+        const response = await fetch(`https://localhost:7150/api/dashboard/kpi?KommunId=${kommun.Kommun}`);
         const data = await response.json();
-        setKpiData(data);
+        setKpiData(data.data);
       } catch (error) {
         console.error("Error fetching KPI data:", error);
       } finally {
@@ -33,9 +33,9 @@ const Dashboard = ({ kommun }) => {
     // Hämta Chart-data
     const fetchChartData = async () => {
       try {
-        const response = await fetch(`https://localhost:7150/api/Dashboard/charts?KommunId=${kommun.Kommun}`);
+        const response = await fetch(`https://localhost:7150/api/dashboard/charts?KommunId=${kommun.Kommun}`);
         const data = await response.json();
-        setChartData(data);
+        setChartData(data.data);
       } catch (error) {
         console.error("Error fetching chart data:", error);
       } finally {

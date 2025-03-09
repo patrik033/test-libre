@@ -4,7 +4,7 @@ import { Link as ScrollLink } from "react-scroll";
 import { motion } from "framer-motion";
 import Fireworks from "@fireworks-js/react";
 import Link from "next/link";
-
+import Image from "next/image";
 
 const HomePage = () => {
 
@@ -80,21 +80,25 @@ const HomePage = () => {
               transition={{ duration: 1 }}
             >
               {/* Bild med gradient-overlay */}
-              <div className="relative w-full  mb-4">
-                <img
+              <div className="relative w-full mb-4" style={{ height: "50vh" }}>
+                <Image
                   src="/data-analys.jpg"
                   alt="Dataanalys"
-                  className="rounded-lg w-full shadow-md object-cover h-[50vh]"
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="rounded-lg shadow-md"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-75 rounded-lg"></div>
               </div>
+
               <h3 className="text-2xl font-bold mb-4 text-gray-100">Dataanalys</h3>
               <p className="mb-4 text-gray-300 text-center">
                 Utforska nationella provresultat, medellivslängd och inkomstnivåer. Upptäck hur data kan ge insikter för bättre beslut och analyser av kommuners utveckling.
               </p>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform transform hover:scale-105 glow-button">
+              <Link className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform transform hover:scale-105 glow-button"
+              href={"/ComingSoon"}
+              >
                 Utforska Dataanalys
-              </button>
+              </Link>
             </motion.div>
 
             {/* Karttjänster Block */}
@@ -106,11 +110,13 @@ const HomePage = () => {
               transition={{ duration: 1, delay: 0.2 }}
             >
               {/* Bild med gradient-overlay */}
-              <div className="relative w-full mb-4">
-                <img
+              <div className="relative w-full mb-4" style={{ height: "50vh" }}>
+                <Image
                   src="/mapillustration.jpg"
                   alt="Karttjänster"
-                  className="rounded-lg w-full shadow-md object-cover h-[50vh]"
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="rounded-lg w-full shadow-md"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-800 via-transparent to-transparent opacity-75 rounded-lg"></div>
               </div>
@@ -118,9 +124,9 @@ const HomePage = () => {
               <p className="mb-4 text-gray-300 text-center">
                 Kombinera olika datalager på kartan för att analysera fastighetsdata, bullernivåer och andra viktiga insikter. Karttjänster ger dig verktygen för att förstå lokala trender.
               </p>
-              <button className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 shadow-md transition-transform transform hover:scale-105 glow-button">
+              <Link className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 shadow-md transition-transform transform hover:scale-105 glow-button" href={"/ComingSoon"}>
                 Se Karttjänster
-              </button>
+              </Link>
             </motion.div>
           </div>
         </div>
@@ -187,9 +193,13 @@ const HomePage = () => {
                 <div className="mb-4">{offer.icon}</div>
                 <h3 className="text-2xl font-bold mb-4 text-gray-100">{offer.title}</h3>
                 <p className="text-gray-300 text-center">{offer.description}</p>
-                <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform transform hover:scale-105">
+
+
+                <Link className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 shadow-md transition-transform transform hover:scale-105"
+                  href={"/ComingSoon"}
+                >
                   Läs Mer
-                </button>
+                </Link>
               </div>
             ))}
           </div>
@@ -268,11 +278,12 @@ const HomePage = () => {
                 <div className="mb-4">{tryItem.icon}</div>
                 <h3 className="text-2xl font-bold mb-4 text-gray-100">{tryItem.title}</h3>
                 <p className="text-gray-300 text-center">{tryItem.description}</p>
-                <button
+                <Link
+                  href={"/ComingSoon"}
                   className={`${tryItem.buttonColor} mt-4 text-white px-4 py-2 rounded-full shadow-md transition-transform transform hover:scale-105`}
                 >
                   {tryItem.buttonText}
-                </button>
+                </Link>
               </div>
             ))}
           </div>

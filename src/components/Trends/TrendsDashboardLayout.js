@@ -38,8 +38,11 @@ const TrendDashboardLayout = () => {
     }
   };
 
+
+  // comparison-dashboard px-4 md:px-8 bg-gray-100 text-gray-800 text-white min-h-screen p-8
+  // trend-dashboard-layout bg-gray-100 min-h-screen p-4 md:p-8
   return (
-    <div className="trend-dashboard-layout bg-gray-100 min-h-screen p-4 md:p-8">
+    <div className="trend-dashboard-layout md:px-8 bg-gray-100 text-gray-800  min-h-screen p-8">
       <h1 className="text-3xl font-bold mb-8 text-center text-blue-800">
         Kommuntrender
       </h1>

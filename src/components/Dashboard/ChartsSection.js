@@ -9,7 +9,7 @@ const ChartsSection = ({ data }) => {
       </div>
     );
   }
-
+  
   const {
     propertySales = [],
     crimeDistribution = [],
@@ -18,6 +18,7 @@ const ChartsSection = ({ data }) => {
     schoolResultYearNine = [],
     topSchools = [],
   } = data;
+  
 
   // Funktion för att hantera tomma dataset
   const createChartData = (labels, dataset) => ({
@@ -82,24 +83,27 @@ const ChartsSection = ({ data }) => {
 
   const topSchoolsData = createChartData(
     topSchools.map((item) => item.schoolName),
+    
     {
       label: "Betyg för bästa skolor",
       data: topSchools.map((item) => item.averageGrade),
       backgroundColor: ["#4BC0C0", "#9966FF", "#FFCE56"],
-    }
+    },
   );
+
+
 
   return (
     <div className="charts-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {/* Fastighetsförsäljningar */}
       <div className="chart bg-white p-4 rounded shadow">
-        <h3 className="text-xl font-semibold mb-2 text-gray-800">Fastighetsförsäljningar</h3>
+        <h3 className="text-xl font-semibold mb-2 text-gray-800">Fastighetsförsäljningar (Top 3)</h3>
         <Pie data={propertySalesData} />
       </div>
 
       {/* Brottsfördelning */}
       <div className="chart bg-white p-4 rounded shadow">
-        <h3 className="text-xl font-semibold mb-2 text-gray-800">Brottsfördelning</h3>
+        <h3 className="text-xl font-semibold mb-2 text-gray-800">Brottsfördelning <b>(Top 5)</b></h3>
         <Bar data={crimeData} options={{ scales: { y: { beginAtZero: true } } }} />
       </div>
 

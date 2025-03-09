@@ -31,9 +31,14 @@ const KommunRankingPage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Header */}
-      <header className="bg-blue-600 text-white py-6 shadow-md">
+      {/* <header className="bg-blue-600 text-white py-6 shadow-md">
         <h1 className="text-center text-3xl font-bold">Kommunranking</h1>
-      </header>
+      </header> */}
+
+
+<h1 className="text-3xl font-bold mb-8 text-center text-blue-800">
+        Kommuntrender
+      </h1>
 
       {/* Content */}
       <main className="flex-1 container mx-auto p-6">
@@ -92,9 +97,9 @@ const KommunRankingPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white text-center py-3">
+      {/* <footer className="bg-gray-800 text-white text-center py-3">
         <p>&copy; 2024 Kommunranking</p>
-      </footer>
+      </footer> */}
     </div>
   );
 };

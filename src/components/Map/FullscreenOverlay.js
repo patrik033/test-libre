@@ -21,11 +21,11 @@ const FullscreenOverlay = ({ propertiesToSend, onClose }) => {
             setLoading(true);
             setError(false); // Återställ felstatus
             try {
-                const response = await fetch(`https://localhost:7150/api/kommuner/realEstateById/${propertiesToSend}`);
+                const response = await fetch(`https://localhost:7150/api/realestate/getRealEstateById/${propertiesToSend}`);
                 if (!response.ok) throw new Error("Failed to fetch property data");
                 const data = await response.json();
           
-                setProperty(data);
+                setProperty(data.data);
             } catch (error) {
                 console.error("Error fetching property data:", error);
                 setError(true);
